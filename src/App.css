@@ -1,0 +1,32 @@
+.nav__list_item {
+    cursor: pointer;
+    list-style: none;
+}
+.nav__wrapper {
+    display: flex;
+    gap: 15px;
+}
+.home_page__title {
+    max-width: 380px;
+}
+.regular_paragraph {
+    max-width: 400px;
+}
+pre {
+    color: #84d633;
+    font-weight: 600;
+    font-size: 0.8rem;
+    background-color: rgb(49, 49, 49);
+    display: block;
+    max-width: 450px;
+}
+
+pre > code {
+    display: block;
+}
+
+@media (max-width: 450px) {
+    pre > code {
+        font-size: 0.6rem !important;
+    }
+}
