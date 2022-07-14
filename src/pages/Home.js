@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import CrazyTextComponent from '../components/specializedComponents/CrazyTextComponent';
+import RefInput from '../components/specializedComponents/RefInput';
+
+// import React from 'react'
+
+// export default
+function Learning() {
+    return <div>Learning...</div>;
+}
 
 export default function Home() {
-    // const [text, setText] = useState(`Hi I'm Dmitriy, ${'\n'} web developer`);
-    const [potentialKnowledge, setPotentialKnowledge] = useState([]);
-    // const [knowledge, setKnowledge] = useState([]);
+    console.log('Parent element rendered: Home');
     const headerText = 'developer';
-    // const paragraphText = `
+    const knowledgeContainer = useRef();
+
+    const [isChanged, setIsChanged] = useState(false);
+    const [isLearning, setIsLearning] = useState(false);
     const [meAsDeveloper, setMeAsDeveloper] = useState({
-        experience: '>3 years',
-        experienceStructure: {
-            selfEducation: '> 3 years',
+        experience: {
+            selfEducation: '>3 years',
             workForBusiness: '1 year'
         },
         coreSkills: {
@@ -39,48 +47,74 @@ export default function Home() {
                 }
             },
             newKnowledge: [],
-            learnedKnowledge: []
+            learnedKnowledge: [],
+            learn: function (...knowledge) {
+                setMeAsDeveloper((prevState) => {
+                    let newObj = { ...prevState };
+                    newObj.coreSkills.learnedKnowledge.push(...newObj.coreSkills.newKnowledge);
+                    newObj.coreSkills.newKnowledge = [];
+                    return newObj;
+                });
+            }
         }
     });
 
-    const learn = (learner, ...knowledge) => {
-        learner.coreSkills.newKnowledge.push(...knowledge);
-    };
-    const practice = (learner) => {
-        if (learner.coreSkills.newKnowledge.length > 0) {
-            learner.coreSkills.newKnowledge.map((task) => {
-                learner.practiceTask(task) === 'Done' && learner.learnedKnowledge(task);
-            });
-        }
-    };
-    function codingEvolution(learning, practice) {}
-    // `;
-
-    function educationPlaning() {
+    function educationPlaning(targetElement) {
         setMeAsDeveloper((prevState) => {
             let newObj = { ...prevState };
-            newObj.coreSkills.newKnowledge.push(potentialKnowledge);
+            newObj.coreSkills.newKnowledge.push(targetElement.current.value);
             return newObj;
         });
+
+        knowledgeContainer.current.focus();
     }
-    return (
-        <div>
-            <h1 className="home_page__title">
-                Hi I'm Dmitriy, <br /> web <CrazyTextComponent text={headerText} />
-            </h1>
-            <h4 className="home_page__theme-header mt-5">My experience:</h4>
-            <p className="home_page__paragraph regular_paragraph"></p>
-            <pre>
-                <code>{JSON.stringify(meAsDeveloper, ',', 2)}</code>
-            </pre>
-            <input
-                value={potentialKnowledge}
-                onChange={(e) => {
-                    setPotentialKnowledge(e.target.value);
-                }}></input>
-            <button className="btn btn-success" onClick={educationPlaning}>
-                Add knowledge
-            </button>
-        </div>
-    );
+    if (!isLearning) {
+        return (
+            <div>
+                <h1 className="home_page__title">
+                    Hi I'm Dmitriy, <br /> web <CrazyTextComponent text={headerText} />
+                </h1>
+                <p className="home_page__paragraph regular_paragraph">This SPA is made in pure reactJS</p>
+                <h4 className="home_page__theme-header mt-5">My experience:</h4>
+                <pre>
+                    <code>{JSON.stringify(meAsDeveloper, ',', 2)}</code>
+                </pre>
+
+                <RefInput refer={knowledgeContainer} changed={{ isChanged }} />
+
+                <button
+                    className="btn btn-success"
+                    onClick={() => {
+                        educationPlaning(knowledgeContainer);
+                        setIsChanged((prevState) => {
+                            return (
+                                !prevState,
+                                setTimeout(() => {
+                                    setIsChanged(false);
+                                }, 100)
+                            );
+                        });
+                    }}>
+                    Add knowledge
+                </button>
+                <button
+                    className="btn btn-warning"
+                    onClick={() => {
+                        meAsDeveloper.coreSkills.learn(meAsDeveloper.coreSkills.newKnowledge);
+                        setIsLearning((prevState) => {
+                            return !prevState;
+                        });
+                        setTimeout(() => {
+                            setIsLearning((prevState) => {
+                                return !prevState;
+                            });
+                        }, 1000);
+                    }}>
+                    Learn knowledge
+                </button>
+            </div>
+        );
+    } else {
+        return <Learning />;
+    }
 }
