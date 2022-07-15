@@ -44,7 +44,7 @@ export default function RenderGround() {
                 if (e > 7) {
                     placeHolder = '%';
                 }
-                if (i === 10 && j == 26) {
+                if (i === 9 && j == 25) {
                     placeHolder = '@';
                 }
                 return (
@@ -135,6 +135,25 @@ export default function RenderGround() {
             <div className="field__container">{map}</div>
             <div className="">
                 You press: <b>{arrows || '...'}</b> key on keyboard
+            </div>
+
+            <div className="game-pad__wrapper">
+                <div className="game-pad__buttons">
+                    <button className="btn btn-up-down" onClick={moveUp}>
+                        Up
+                    </button>
+                    <div>
+                        <button className="btn btn-left-right" onClick={moveLeft}>
+                            Left
+                        </button>
+                        <button className="btn btn-left-right" onClick={moveRight}>
+                            Right
+                        </button>
+                    </div>
+                    <button className="btn btn-up-down" onClick={moveDown}>
+                        Down
+                    </button>
+                </div>
             </div>
         </>
     );

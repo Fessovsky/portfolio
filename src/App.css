@@ -92,3 +92,12 @@ pre > code {
     grid-template-columns: repeat(51, 1fr);
     border: 1px solid #777;
 }
+.game-pad__wrapper {
+    display: flex;
+    justify-content: center;
+}
+.game-pad__buttons {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
