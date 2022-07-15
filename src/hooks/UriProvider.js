@@ -6,6 +6,7 @@ export const useUriContext = () => {
 };
 export const UriProvider = ({ children }) => {
     const [uri, setUri] = useState('Home');
+    const [isAnimated, setIsAnimated] = useState(false);
 
     const changeCurrentPage = (link) => setUri(link);
 
@@ -13,7 +14,13 @@ export const UriProvider = ({ children }) => {
         window.history.pushState(uri, uri, `/${uri}`);
     }, [uri]);
     return (
-        <UriContext.Provider value={{ uri: uri, changeUri: changeCurrentPage }}>
+        <UriContext.Provider
+            value={{
+                uri: uri,
+                changeUri: changeCurrentPage,
+                isAnimated: isAnimated,
+                setIsAnimated: setIsAnimated
+            }}>
             {children}
         </UriContext.Provider>
     );

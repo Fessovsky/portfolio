@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 export default function Input(props) {
     const [state, setState] = useState('');
     useEffect(() => {
-        console.log('Input element rendered', props.changed);
+        // console.log('Input element rendered', props.changed);
 
         props.changed.isChanged && setState('');
     }, [props.changed]);

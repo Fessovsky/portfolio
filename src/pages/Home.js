@@ -1,18 +1,12 @@
 import React, { useState, useRef } from 'react';
 import CrazyTextComponent from '../components/specializedComponents/CrazyTextComponent';
 import RefInput from '../components/specializedComponents/RefInput';
-
-// import React from 'react'
-
-// export default
-function Learning() {
-    return <div>Learning...</div>;
-}
-
+import Learning from '../components/Learning';
 export default function Home() {
-    console.log('Parent element rendered: Home');
+    // console.log('Parent element rendered: Home');
     const headerText = 'developer';
     const knowledgeContainer = useRef();
+    const buttonAdd = useRef();
 
     const [isChanged, setIsChanged] = useState(false);
     const [isLearning, setIsLearning] = useState(false);
@@ -34,7 +28,6 @@ export default function Home() {
             },
             otherSkills: {
                 SQL: 'Intermediate',
-                CS: '',
                 design: {
                     overall: 'Advanced',
                     soft: {
@@ -48,17 +41,37 @@ export default function Home() {
             },
             newKnowledge: [],
             learnedKnowledge: [],
-            learn: function (...knowledge) {
+            learn: function () {
                 setMeAsDeveloper((prevState) => {
                     let newObj = { ...prevState };
                     newObj.coreSkills.learnedKnowledge.push(...newObj.coreSkills.newKnowledge);
-                    newObj.coreSkills.newKnowledge = [];
+
                     return newObj;
                 });
             }
         }
     });
-
+    React.useEffect(() => {
+        let handleEnter = (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                buttonAdd.current.click();
+            }
+        };
+        window.addEventListener('keypress', handleEnter);
+        return () => {
+            window.removeEventListener('keypress', handleEnter);
+        };
+    });
+    React.useEffect(() => {}, [isLearning]);
+    function handleLearningStateChange() {
+        setMeAsDeveloper((prevState) => {
+            let newObj = { ...prevState };
+            newObj.coreSkills.newKnowledge = [];
+            return newObj;
+        });
+        setIsLearning(false);
+    }
     function educationPlaning(targetElement) {
         setMeAsDeveloper((prevState) => {
             let newObj = { ...prevState };
@@ -68,53 +81,49 @@ export default function Home() {
 
         knowledgeContainer.current.focus();
     }
-    if (!isLearning) {
+    if (isLearning) {
         return (
-            <div>
-                <h1 className="home_page__title">
-                    Hi I'm Dmitriy, <br /> web <CrazyTextComponent text={headerText} />
-                </h1>
-                <p className="home_page__paragraph regular_paragraph">This SPA is made in pure reactJS</p>
-                <h4 className="home_page__theme-header mt-5">My experience:</h4>
-                <pre>
-                    <code>{JSON.stringify(meAsDeveloper, ',', 2)}</code>
-                </pre>
-
-                <RefInput refer={knowledgeContainer} changed={{ isChanged }} />
-
-                <button
-                    className="btn btn-success"
-                    onClick={() => {
-                        educationPlaning(knowledgeContainer);
-                        setIsChanged((prevState) => {
-                            return (
-                                !prevState,
-                                setTimeout(() => {
-                                    setIsChanged(false);
-                                }, 100)
-                            );
-                        });
-                    }}>
-                    Add knowledge
-                </button>
-                <button
-                    className="btn btn-warning"
-                    onClick={() => {
-                        meAsDeveloper.coreSkills.learn(meAsDeveloper.coreSkills.newKnowledge);
-                        setIsLearning((prevState) => {
-                            return !prevState;
-                        });
-                        setTimeout(() => {
-                            setIsLearning((prevState) => {
-                                return !prevState;
-                            });
-                        }, 1000);
-                    }}>
-                    Learn knowledge
-                </button>
-            </div>
+            <Learning
+                newKnowledge={meAsDeveloper.coreSkills.newKnowledge}
+                stopLearning={handleLearningStateChange}
+            />
         );
-    } else {
-        return <Learning />;
     }
+    return (
+        <div>
+            <h1 className="home_page__title">
+                Hi I'm Dmitriy, <br /> web <CrazyTextComponent text={headerText} />
+            </h1>
+            <p className="home_page__paragraph regular_paragraph">This SPA is made in pure React</p>
+            <h4 className="home_page__theme-header mt-5">My experience:</h4>
+            <pre>
+                <code>{JSON.stringify(meAsDeveloper, ',', 2)}</code>
+            </pre>
+
+            <RefInput refer={knowledgeContainer} changed={{ isChanged }} />
+
+            <button
+                ref={buttonAdd}
+                className="btn btn-success"
+                onClick={() => {
+                    educationPlaning(knowledgeContainer);
+                    setIsChanged((prevState) => !prevState);
+                    setTimeout(() => {
+                        setIsChanged(false);
+                    }, 0);
+                }}>
+                Add knowledge
+            </button>
+            <button
+                className="btn btn-warning"
+                onClick={() => {
+                    meAsDeveloper.coreSkills.learn(meAsDeveloper.coreSkills.newKnowledge);
+                    setIsLearning((prevState) => {
+                        return !prevState;
+                    });
+                }}>
+                Learn knowledge
+            </button>
+        </div>
+    );
 }

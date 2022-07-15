@@ -3,7 +3,7 @@ import { useUriContext } from '../hooks/UriProvider';
 import Home from '../pages/Home';
 import About from '../pages/About';
 import Contacts from '../pages/Contacts';
-import AnotherPage from '../pages/AnotherPage';
+import AnotherPage from '../pages/RogulikeBase';
 
 export default function PageComponent() {
     const uriContext = useUriContext();

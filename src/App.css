@@ -12,6 +12,17 @@
 .regular_paragraph {
     max-width: 400px;
 }
+.nav__header {
+    display: flex;
+    justify-content: space-between;
+}
+.nav__header__button {
+    border: none;
+    border-bottom: 1px solid var(--bs-body-color);
+
+    background: none;
+}
+
 pre {
     color: #84d633;
     font-weight: 600;
@@ -19,6 +30,11 @@ pre {
     background-color: rgb(49, 49, 49);
     display: block;
     max-width: 450px;
+    white-space: pre-wrap; /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    word-wrap: break-word;
 }
 
 pre > code {
@@ -29,4 +45,50 @@ pre > code {
     pre > code {
         font-size: 0.6rem !important;
     }
+}
+.btn {
+    margin: 5px 5px;
+}
+.contact__link {
+    border-bottom: 1px solid;
+    cursor: pointer;
+}
+
+.nav__list_link_active_animation {
+    animation: blink 0.8s ease-in infinite;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.contacts__contact_container {
+    /* max-width: 250px; */
+}
+.contacts__contact__container_item {
+    display: grid;
+    grid-template-columns: 1fr auto 6fr;
+    white-space: nowrap; /* Since CSS 2.1 */
+    white-space: nowrap; /* Mozilla, since 1999 */
+    white-space: nowrap; /* Opera 4-6 */
+    white-space: nowrap; /* Opera 7 */
+    word-wrap: nowrap;
+}
+/* game */
+.cell {
+    /* border-bottom: 1px solid #777; */
+    font-size: 0.7rem;
+}
+
+.field__container {
+    display: grid;
+    grid-template-columns: repeat(51, 1fr);
+    border: 1px solid #777;
 }
