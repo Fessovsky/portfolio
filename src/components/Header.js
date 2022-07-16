@@ -3,7 +3,7 @@ import { useUriContext } from '../hooks/UriProvider';
 
 export default function Header() {
     const uriContext = useUriContext();
-    const linkNames = ['Home', 'Contacts', 'Roguelike alfa', 'About'];
+    const linkNames = ['Home', 'Contacts', 'RoguelikeBase', 'About'];
 
     function handleClick() {
         uriContext.setIsAnimated((prevState) => !prevState);
@@ -22,7 +22,7 @@ export default function Header() {
     return (
         <header className="nav__header">
             <nav className="nav__wrapper">{linkList}</nav>
-            <button className="nav__header__button" onClick={handleClick}>
+            <button className="nav__header__button small" onClick={handleClick}>
                 animate link
             </button>
         </header>
