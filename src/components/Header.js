@@ -3,7 +3,7 @@ import { useUriContext } from '../hooks/UriProvider';
 
 export default function Header() {
     const uriContext = useUriContext();
-    const linkNames = ['Home', 'Contacts', 'Another page', 'About'];
+    const linkNames = ['Home', 'Contacts', 'Roguelike alfa', 'About'];
 
     function handleClick() {
         uriContext.setIsAnimated((prevState) => !prevState);
