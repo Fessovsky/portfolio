@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 
 export default function Contact() {
     const [placeholders, setPlaceholders] = useState({ telegram: '', email: '' });
-    const [contact, setContack] = useState({ telegram: '@fessovsky', email: 'isaev.dmi3@gmail.com' });
+    const contacts = { telegram: '@fessovsky', email: 'isaev.dmi3@gmail.com' };
     function handleClick(target) {
         setPlaceholders((prevState) => {
-            return { ...prevState, [target.dataset.name]: contact[target.dataset.name] };
+            return { ...prevState, [target.dataset.name]: contacts[target.dataset.name] };
         });
     }
     return (

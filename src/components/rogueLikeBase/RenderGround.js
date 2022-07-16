@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 export default function RenderGround() {
     const width = 51;
-    const height = 19;
+    // const height = 19;
     const [ground, setGround] = useState([]);
     const [arrows, setArrows] = useState('');
     // 26, 10 position of the user
 
     function createGround() {
-        let i = 0;
+        // let i = 0;
         let tempArr = Array(1020)
             .fill('')
             .map(() => {
@@ -44,7 +44,7 @@ export default function RenderGround() {
                 if (e > 7) {
                     placeHolder = '%';
                 }
-                if (i === 9 && j == 25) {
+                if (i === 9 && j === 25) {
                     placeHolder = '@';
                 }
                 return (
@@ -98,32 +98,32 @@ export default function RenderGround() {
             return tempArr;
         });
     }
-    function move(e) {
-        e.preventDefault();
-        switch (e.key) {
-            case 'ArrowUp':
-                moveUp();
-                setArrows('Up');
-                break;
-            case 'ArrowDown':
-                moveDown();
-                setArrows('Down');
-                break;
-            case 'ArrowLeft':
-                moveLeft();
-                setArrows('Left');
-                break;
-            case 'ArrowRight':
-                moveRight();
-                setArrows('Right');
-                break;
-            default:
-                setArrows('Use cursor');
-        }
-        // console.log('move', e.key);
-    }
-    useEffect(() => {}, [arrows]);
+
     useEffect(() => {
+        function move(e) {
+            e.preventDefault();
+            switch (e.key) {
+                case 'ArrowUp':
+                    moveUp();
+                    setArrows('Up');
+                    break;
+                case 'ArrowDown':
+                    moveDown();
+                    setArrows('Down');
+                    break;
+                case 'ArrowLeft':
+                    moveLeft();
+                    setArrows('Left');
+                    break;
+                case 'ArrowRight':
+                    moveRight();
+                    setArrows('Right');
+                    break;
+                default:
+                    setArrows('Use cursor');
+            }
+            // console.log('move', e.key);
+        }
         setGround(createGround());
         window.addEventListener('keydown', move);
         return () => {

@@ -91,6 +91,7 @@ pre > code {
     display: grid;
     grid-template-columns: repeat(51, 1fr);
     border: 1px solid #777;
+    max-width: 600px;
 }
 .game-pad__wrapper {
     display: flex;
