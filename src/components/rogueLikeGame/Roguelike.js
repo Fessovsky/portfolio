@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
-export default function RenderGround() {
+export default function Roguelike() {
     const width = 51;
     // const height = 19;
     const [ground, setGround] = useState([]);

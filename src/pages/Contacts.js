@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function Contact() {
+export default function Contacts() {
     const [placeholders, setPlaceholders] = useState({ telegram: '', email: '' });
     const contacts = { telegram: '@fessovsky', email: 'isaev.dmi3@gmail.com' };
     function handleClick(target) {
