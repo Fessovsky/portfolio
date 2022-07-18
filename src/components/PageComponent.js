@@ -3,7 +3,7 @@ import { useUriContext } from '../hooks/UriProvider';
 import Home from '../pages/Home';
 import About from '../pages/About';
 import Contacts from '../pages/Contacts';
-import RogulikeBase from '../pages/RogulikeBase';
+import Projects from '../pages/Projects';
 
 export default function PageComponent() {
     const uriContext = useUriContext();
@@ -15,8 +15,8 @@ export default function PageComponent() {
                 return <Contacts />;
             case 'About':
                 return <About />;
-            case 'RoguelikeBase':
-                return <RogulikeBase />;
+            case 'Projects':
+                return <Projects />;
             default:
                 return <Home />;
         }

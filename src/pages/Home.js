@@ -4,7 +4,7 @@ import RefInput from '../components/specializedComponents/RefInput';
 import Learning from '../components/Learning';
 export default function Home() {
     // console.log('Parent element rendered: Home');
-    const headerText = 'developer';
+    const headerText = 'developer ';
     const knowledgeContainer = useRef();
     const buttonAdd = useRef();
 

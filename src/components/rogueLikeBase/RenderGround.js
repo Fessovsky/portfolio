@@ -5,8 +5,30 @@ export default function RenderGround() {
     // const height = 19;
     const [ground, setGround] = useState([]);
     const [arrows, setArrows] = useState('');
+    const [message, setMessage] = useState('');
+    const [collisionMessage, setCollisionMessage] = useState('');
     // 26, 10 position of the user
+    function colisionAlfa(char) {
+        let result = '';
+        switch (char) {
+            case '%':
+                result = 'a tree';
+                break;
+            case '.':
+                result = 'ground';
+                break;
+            case '"':
+                result = 'grass';
+                break;
+            case ',':
+                result = 'mud';
+                break;
 
+            default:
+                result = 'nothing has found';
+        }
+        return result;
+    }
     function createGround() {
         // let i = 0;
         let tempArr = Array(1020)
@@ -44,7 +66,9 @@ export default function RenderGround() {
                 if (e > 7) {
                     placeHolder = '%';
                 }
+
                 if (i === 9 && j === 25) {
+                    setCollisionMessage(colisionAlfa(placeHolder));
                     placeHolder = '@';
                 }
                 return (
@@ -124,6 +148,7 @@ export default function RenderGround() {
             }
             // console.log('move', e.key);
         }
+
         setGround(createGround());
         window.addEventListener('keydown', move);
         return () => {
@@ -135,6 +160,9 @@ export default function RenderGround() {
             <div className="field__container">{map}</div>
             <div className="">
                 You press: <b>{arrows || '...'}</b> key on keyboard
+            </div>
+            <div>
+                <span>You see {collisionMessage}</span>
             </div>
 
             <div className="game-pad__wrapper">
@@ -155,6 +183,14 @@ export default function RenderGround() {
                     </button>
                 </div>
             </div>
+            <button
+                onClick={() => {
+                    setMessage('New message:' + Date.now().toString());
+                }}
+                className="btn btn-success">
+                Change state for test useMemo
+            </button>
+            <h4>{message}</h4>
         </>
     );
 }
