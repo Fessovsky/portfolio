@@ -5,6 +5,7 @@ import { pages as routes } from '../router/routeComponents';
 export default function PageComponent() {
     const uriContext = useUriContext();
     const renderPage = (uri) => {
+        console.log(uri);
         return routes.map((route, i) => {
             // take function names to return Component
             return route.type.name === uri && { ...route, key: i };
