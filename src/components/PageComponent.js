@@ -5,9 +5,9 @@ import { pages as routes } from '../router/routeComponents';
 export default function PageComponent() {
     const uriContext = useUriContext();
     const renderPage = (uri) => {
-        console.log(uri);
         return routes.map((route, i) => {
             // take function names to return Component
+            console.log(route.type.name === uri, route.type.name);
             return route.type.name === uri && { ...route, key: i };
         });
     };
