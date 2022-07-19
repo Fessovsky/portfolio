@@ -1,9 +1,10 @@
 import React from 'react';
 import { projects } from '../router/routeProjects';
 import ChangeItemButton from '../components/specializedComponents/ChangeItemButton';
+import Line from '../components/specializedComponents/Line/Line';
 
 export default function Projects() {
-    const [projectName, setProjectName] = React.useState('');
+    const [projectName, setProjectName] = React.useState('Shop');
     const projectsNames = projects.map((project) => {
         return project.type.name;
     });
@@ -17,6 +18,7 @@ export default function Projects() {
     return (
         <>
             <ChangeItemButton onClickHandler={onClickHandler} itemsArray={projectsNames} />
+            <Line />
             {currentProject}
         </>
     );

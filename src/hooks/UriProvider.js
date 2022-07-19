@@ -12,6 +12,7 @@ export const UriProvider = ({ children }) => {
 
     useEffect(() => {
         window.history.pushState(uri, uri, `/${uri}`);
+        document.title = 'Page: ' + uri;
     }, [uri]);
     return (
         <UriContext.Provider

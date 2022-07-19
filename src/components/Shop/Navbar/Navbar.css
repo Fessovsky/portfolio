@@ -1,0 +1,14 @@
+.navbar__wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.navbar__links {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    gap: 5px;
+}
+.navbar__links__link > a {
+    color: black;
+}

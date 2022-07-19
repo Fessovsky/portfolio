@@ -104,10 +104,8 @@ export default function Roguelike() {
         setGround((prevState) => {
             let tempArr = [...prevState];
             let firstRow = tempArr[0];
-
             tempArr.shift();
             tempArr.push(firstRow);
-
             return tempArr;
         });
     }
@@ -115,10 +113,8 @@ export default function Roguelike() {
         setGround((prevState) => {
             let tempArr = [...prevState];
             let lastRow = tempArr[tempArr.length - 1];
-
             tempArr.pop();
             tempArr.unshift(lastRow);
-
             return tempArr;
         });
     }
@@ -131,17 +127,33 @@ export default function Roguelike() {
                     moveUp();
                     setArrows('Up');
                     break;
+                case 'w':
+                    moveUp();
+                    setArrows('w');
+                    break;
                 case 'ArrowDown':
                     moveDown();
                     setArrows('Down');
+                    break;
+                case 's':
+                    moveDown();
+                    setArrows('s');
                     break;
                 case 'ArrowLeft':
                     moveLeft();
                     setArrows('Left');
                     break;
+                case 'a':
+                    moveLeft();
+                    setArrows('a');
+                    break;
                 case 'ArrowRight':
                     moveRight();
                     setArrows('Right');
+                    break;
+                case 'd':
+                    moveRight();
+                    setArrows('d');
                     break;
                 default:
                     setArrows('Use cursor');
