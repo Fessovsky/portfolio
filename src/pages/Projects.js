@@ -12,7 +12,7 @@ export default function Projects() {
         setProjectName(item);
     }
     let currentProject = projects.map((item, i) => {
-        return item.type.name === projectName && { ...item, key: i };
+        return item.type.targetName === projectName && { ...item, key: i };
     });
     React.useEffect(() => {}, [projectName]);
     return (

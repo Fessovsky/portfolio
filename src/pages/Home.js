@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import CrazyTextComponent from '../components/specializedComponents/CrazyTextComponent';
 import RefInput from '../components/specializedComponents/RefInput';
 import Learning from '../components/Learning';
-export default function Home() {
+function Home() {
     // console.log('Parent element rendered: Home');
     const headerText = 'developer ';
     const knowledgeContainer = useRef();
@@ -127,3 +127,5 @@ export default function Home() {
         </div>
     );
 }
+Home.targetName = 'Home';
+export default Home;
