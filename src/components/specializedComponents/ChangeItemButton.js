@@ -12,7 +12,7 @@ export default function ChangeItemListButton({ onClickHandler, itemsArray }) {
                         onClickHandler(item);
                     }}
                     key={item + '-' + i}>
-                    {item}
+                    <span className="projects__list__item-span">{item}</span>
                 </li>
             );
         });

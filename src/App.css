@@ -107,13 +107,19 @@ pre > code {
     margin: 0 5px;
     padding: 0;
     gap: 15px;
+    margin-bottom: 7px;
+    padding-bottom: 32px;
 }
 .projects__list__item {
     cursor: pointer;
     margin: 0;
     list-style: none;
+    min-width: 100px;
+}
+.projects__list__item-span {
+    position: absolute;
+    padding: 10px 0;
 }
 .projects__list__item:hover {
     font-weight: 600;
-    margin: 0px -5.7px;
 }
