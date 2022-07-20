@@ -1,6 +1,6 @@
 import Roguelike from '../components/rogueLikeGame/Roguelike';
 import Shop from '../components/Shop/Shop';
-import { addNameOfComponentToField } from '../functions/addNameOfComponentToField';
+import { addCustomNameOfComponentToField } from '../functions/addCustomNameOfComponentToField';
 let projects = [Roguelike, Shop];
-projects = addNameOfComponentToField(projects, 'projectName');
+projects = addCustomNameOfComponentToField(projects, 'projectName');
 export default projects;
