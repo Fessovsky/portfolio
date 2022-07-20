@@ -24,4 +24,4 @@ function Projects() {
     );
 }
 Projects.customName = 'Projects';
-export default Projects();
+export default Projects;

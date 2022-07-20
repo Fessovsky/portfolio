@@ -34,4 +34,4 @@ function Contacts() {
     );
 }
 Contacts.customName = 'Contacts';
-export default Contacts();
+export default Contacts;

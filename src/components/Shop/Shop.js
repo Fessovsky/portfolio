@@ -52,4 +52,4 @@ function Shop() {
     );
 }
 Shop.customName = 'Shop';
-export default Shop();
+export default Shop;

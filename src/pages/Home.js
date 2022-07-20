@@ -128,4 +128,4 @@ function Home() {
     );
 }
 Home.customName = 'Home';
-export default Home();
+export default Home;

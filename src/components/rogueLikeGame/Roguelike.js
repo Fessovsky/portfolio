@@ -207,4 +207,4 @@ function Roguelike() {
     );
 }
 Roguelike.customName = 'Roguelike';
-export default Roguelike();
+export default Roguelike;
