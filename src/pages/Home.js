@@ -127,5 +127,5 @@ function Home() {
         </div>
     );
 }
-Home.targetName = 'Home';
-export default Home;
+Home.customName = 'Home';
+export default Home();

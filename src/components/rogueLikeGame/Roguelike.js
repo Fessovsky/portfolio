@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
-export default function Roguelike() {
+function Roguelike() {
     const width = 51;
     // const height = 19;
     const [ground, setGround] = useState([]);
@@ -206,3 +206,5 @@ export default function Roguelike() {
         </>
     );
 }
+Roguelike.customName = 'Roguelike';
+export default Roguelike();

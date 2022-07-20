@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function Contacts() {
+function Contacts() {
     const [placeholders, setPlaceholders] = useState({ telegram: '', email: '' });
     const contacts = { telegram: '@fessovsky', email: 'isaev.dmi3@gmail.com' };
     function handleClick(target) {
@@ -33,3 +33,5 @@ export default function Contacts() {
         </div>
     );
 }
+Contacts.customName = 'Contacts';
+export default Contacts();

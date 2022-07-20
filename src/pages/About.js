@@ -1,5 +1,7 @@
 import React from 'react';
 
-export default function About() {
+function About() {
     return <div>About myself</div>;
 }
+About.customName = 'About';
+export default About();

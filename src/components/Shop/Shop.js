@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
 import Navbar from './Navbar/Navbar';
-import './Shop.css';
+import { ShopProvider } from '../../hooks/ShopProvider';
 
 // const Banner = () => {
 //     return <div>Banner</div>;
 // };
 const wallMartAPI =
     'https://api.bluecartapi.com/request?api_key=demo&type=search&search_term=highlighter+pens&sort_by=best_seller';
-export default function Shop() {
+function Shop() {
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [products, setProducts] = useState(() => JSON.parse(localStorage.getItem('products')) || null);
@@ -44,10 +44,12 @@ export default function Shop() {
         return <h1>Loading...</h1>;
     }
     return (
-        <div>
+        <ShopProvider>
             {error && <h1>Error: {`${error.message}`}</h1>}
             <Navbar />
             <ProductCard products={products} />
-        </div>
+        </ShopProvider>
     );
 }
+Shop.customName = 'Shop';
+export default Shop();

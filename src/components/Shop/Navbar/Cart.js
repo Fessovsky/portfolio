@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import cartImg from './pics/shopping-cart.png';
+// import { useShopContext } from '../../../hooks/ShopProvider';
 import './Cart.css';
 
 export default function Cart({ quantity }) {
     const [cart, setCart] = useState({});
+    // const cartContext = useShopContext();
+    // cartContext.handleCart({ product: 'test', quantity: 10 });
+
     useEffect(() => {
         setCart((prevCart) => {
             return { ...prevCart, quantity: quantity };

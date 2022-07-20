@@ -1,14 +1,13 @@
 import React from 'react';
 import { useUriContext } from '../hooks/UriProvider';
-import { pages as routes } from '../router/routeComponents';
+import routes from '../router/routeComponents';
 
 export default function PageComponent() {
     const uriContext = useUriContext();
     const renderPage = (uri) => {
         return routes.map((route, i) => {
             // take function names to return Component
-
-            return route.type.targetName === uri && { ...route, key: i };
+            return route.type.uri === uri && { ...route, key: i };
         });
     };
 

@@ -1,18 +1,18 @@
 import React from 'react';
-import { projects } from '../router/routeProjects';
+import projects from '../router/routeProjects';
 import ChangeItemButton from '../components/specializedComponents/ChangeItemButton';
 import Line from '../components/specializedComponents/Line/Line';
 
-export default function Projects() {
+function Projects() {
     const [projectName, setProjectName] = React.useState('Shop');
     const projectsNames = projects.map((project) => {
-        return project.type.name;
+        return project.type.projectName;
     });
     function onClickHandler(item) {
         setProjectName(item);
     }
     let currentProject = projects.map((item, i) => {
-        return item.type.targetName === projectName && { ...item, key: i };
+        return item.type.projectName === projectName && { ...item, key: i };
     });
     React.useEffect(() => {}, [projectName]);
     return (
@@ -23,3 +23,5 @@ export default function Projects() {
         </>
     );
 }
+Projects.customName = 'Projects';
+export default Projects();
