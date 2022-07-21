@@ -123,3 +123,43 @@ pre > code {
 .projects__list__item:hover {
     font-weight: 600;
 }
+.slider__wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: auto;
+    position: relative;
+    width: 300px;
+
+    scrollbar-width: thin;
+    scrollbar-height: 10px;
+    scrollbar-color: hsla(0, 0%, 100%, 0.1);
+}
+.slider__wrapper > * {
+    margin-bottom: 7px;
+}
+.slider__wrapper > div {
+    display: flex;
+    gap: 5px;
+}
+
+.slider__wrapper > div > div::before {
+    content: ' | ';
+}
+.slider__wrapper > * {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* No*/
+}
+.no__select {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* No*/
+}

@@ -1,26 +1,3 @@
-.slider__wrapper {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    position: relative;
-    width: 300px;
-    scrollbar-width: thin;
-    scrollbar-height: 10px;
-    scrollbar-color: hsla(0, 0%, 100%, 0.1);
-}
-.slider__wrapper > * {
-    margin-bottom: 7px;
-}
-.slider__wrapper > div {
-    display: flex;
-    gap: 5px;
-}
-
-.slider__wrapper > div::before {
-    content: ' | ';
-}
-
 ::-webkit-scrollbar {
     height: 7px;
     background: #35353538;
@@ -36,4 +13,10 @@
 
 ::-webkit-scrollbar-corner {
     background: #000;
+}
+.slider {
+    display: inherit;
+}
+.slider__overflow {
+    overflow: auto;
 }

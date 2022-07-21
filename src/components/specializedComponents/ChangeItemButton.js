@@ -27,8 +27,10 @@ export default function ChangeItemListButton({ onClickHandler, itemsArray }) {
                 {isShown ? 'Hide projects' : 'Show projects'}
             </button>
             {isShown && (
-                <Slider>
-                    <ItemList />
+                <Slider isBoth={true}>
+                    <div className="slider__wrapper">
+                        <ItemList />
+                    </div>
                 </Slider>
             )}
         </>

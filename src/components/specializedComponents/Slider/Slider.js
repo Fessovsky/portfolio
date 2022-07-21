@@ -1,26 +1,54 @@
 import React from 'react';
 import './Slider.css';
 
-export default function Slider({ children }) {
+export default function Slider({ isOnlyY, isOnlyX, isBoth, children }) {
+    let inputReactObject = React.Children.only(children);
+    let clonedChild = React.cloneElement(inputReactObject, {
+        className: 'slider__overflow'
+    });
+
     const [scroll, setScroll] = React.useState({
+        isOnlyX: isOnlyX || false,
+        isOnlyY: isOnlyY || false,
+        isBoth: isBoth || false,
         isScrolling: false,
         scrollLeft: 0,
-        clientX: 0
+        clientX: 0,
+        scrollTop: 0,
+        clientY: 0
     });
     const scroller = React.useRef();
 
     const onMouseDown = (e) => {
-        e.preventDefault();
-        const { scrollLeft } = scroller.current;
-        setScroll({ isScrolling: true, scrollLeft: scrollLeft, clientX: e.clientX });
+        const { scrollLeft, scrollTop } = scroller.current;
+
+        scroller.current.children[0].classList.add('no__select');
+        setScroll({
+            isScrolling: true,
+            scrollLeft: scrollLeft,
+            clientX: e.clientX,
+            scrollTop: scrollTop,
+            clientY: e.clientY
+        });
     };
     const onMouseUp = () => {
-        setScroll({ isScrolling: false, scrollLeft: 0, clientX: 0 });
+        scroller.current.children[0].classList.remove('no__select');
+        setScroll({ isScrolling: false, scrollLeft: 0, clientX: 0, scrollTop: 0, clientY: 0 });
     };
     React.useEffect(() => {
         const onMouseMove = (event) => {
-            const { clientX, scrollLeft } = scroll;
-            scroller.current.scrollLeft = scrollLeft + clientX - event.clientX;
+            const { clientX, scrollLeft, clientY, scrollTop } = scroll;
+
+            if (isOnlyY) {
+                scroller.current.children[0].scrollTop = scrollTop + clientY - event.clientY;
+            }
+            if (isOnlyX) {
+                scroller.current.children[0].scrollLeft = scrollLeft + clientX - event.clientX;
+            }
+            if (isBoth) {
+                scroller.current.children[0].scrollLeft = scrollLeft + clientX - event.clientX;
+                scroller.current.children[0].scrollTop = scrollLeft + clientY - event.clientY;
+            }
         };
         if (scroll.isScrolling) {
             window.addEventListener('mousemove', onMouseMove);
@@ -30,10 +58,11 @@ export default function Slider({ children }) {
             window.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('mouseup', onMouseUp);
         };
-    }, [scroll]);
+    }, [scroll, isOnlyY, isOnlyX, isBoth]);
+
     return (
-        <div ref={scroller} draggable={true} onMouseDown={onMouseDown} className="slider__wrapper">
-            {children}
+        <div ref={scroller} onMouseDown={onMouseDown} className="slider">
+            {clonedChild}
         </div>
     );
 }
