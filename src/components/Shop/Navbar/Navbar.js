@@ -5,7 +5,7 @@ import './Navbar.css';
 export default function Navbar() {
     return (
         <nav className="navbar__wrapper">
-            <div className="navbar__logo">Logo</div>
+            <div className="navbar__logo">MOCKUP LOGO</div>
             <ul className="navbar__links">
                 <li className="navbar__links__link">
                     <a href="#1">First</a>
@@ -19,7 +19,7 @@ export default function Navbar() {
                 <li className="navbar__links__link">
                     <a href="#4">Fourth</a>
                 </li>
-                <Cart quantity="10" />
+                <Cart />
             </ul>
         </nav>
     );

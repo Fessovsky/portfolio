@@ -4,7 +4,14 @@ import './Slider.css';
 export default function Slider({ isOnlyY, isOnlyX, isBoth, children }) {
     let inputReactObject = React.Children.only(children);
     let clonedChild = React.cloneElement(inputReactObject, {
-        className: 'slider__overflow'
+        className: 'slider__overflow',
+        onScroll: function (e) {
+            if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight) {
+                e.target.classList.remove('slider__mask');
+            } else {
+                e.target.classList.add('slider__mask');
+            }
+        }
     });
 
     const [scroll, setScroll] = React.useState({
@@ -50,6 +57,8 @@ export default function Slider({ isOnlyY, isOnlyX, isBoth, children }) {
                 scroller.current.children[0].scrollTop = scrollLeft + clientY - event.clientY;
             }
         };
+        let scrollChild = scroller.current.children[0];
+
         if (scroll.isScrolling) {
             window.addEventListener('mousemove', onMouseMove);
             window.addEventListener('mouseup', onMouseUp);

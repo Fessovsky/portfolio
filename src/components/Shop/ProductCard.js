@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Slider from '../../components/specializedComponents/Slider/Slider';
+import { useShopContext } from '../../hooks/ShopProvider';
+
 // import './ProductCard.css';
 
 // const a = {
@@ -23,7 +25,7 @@ const FlexWrapperRow = styled.div`
 const CardWrapper = styled.div`
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 250px 3rem 60px 120px 50px;
+    grid-template-rows: 260px 0 4rem 2rem 3rem 7rem 56px;
     justify-items: center;
     max-width: 280px;
     border: 1px solid #ccc;
@@ -35,8 +37,6 @@ const CardWrapper = styled.div`
     }
 `;
 const CardImageWrapper = styled.div`
-    /* display: table-cell; */
-
     display: inline-block;
     background: url(${(image) => image.image});
     background-size: 100% auto;
@@ -48,11 +48,44 @@ const CardImageWrapper = styled.div`
 const CardTitle = styled.h5`
     font-size: 0.9rem;
 `;
-const CardDesc = styled.p`
+
+const CardDescComponent = ({ children, className, onScroll }) => {
+    const [hasScroll, setHasScroll] = React.useState(false);
+    const refer = React.useRef();
+    React.useEffect(() => {
+        if (refer.current.scrollHeight > refer.current.clientHeight) {
+            setHasScroll(true);
+        }
+    }, []);
+    return (
+        <p
+            ref={refer}
+            onScroll={(e) => {
+                onScroll(e);
+            }}
+            className={hasScroll ? className + ' slider__mask' : className}>
+            {children}
+        </p>
+    );
+};
+const CardDesc = styled(CardDescComponent)`
     font-size: 0.8rem;
+    &:before {
+        content: '';
+        width: 100%;
+        height: 100%;
+        position: relative;
+        left: 0;
+        top: 0;
+        background: linear-gradient(transparent 150px, white);
+    }
 `;
-const MyButton = ({ className, children }) => {
-    return <button className={className}>{children}</button>;
+const MyButton = ({ className, handleClick, children }) => {
+    return (
+        <button onClick={() => handleClick()} className={'yo' + className}>
+            {children}
+        </button>
+    );
 };
 const CardButton = styled(MyButton)``;
 const CardTop = styled.h6`
@@ -62,30 +95,57 @@ const CardTop = styled.h6`
 
 const UlStyling = styled.div`
     display: flex;
-    justify-content: center;
     margin: 30px 0;
     padding: 0;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 15px;
 `;
+const UlWrapper = styled.div`
+    justify-content: center;
+`;
+const CardPrice = styled.div`
+    font-size: 1.3rem;
+    font-weight: bold;
+    align-self: end;
+`;
+const CardBestPrice = styled.div`
+    color: red;
+    position: relative;
+    bottom: 250px;
+    left: 110px;
+    transform: rotate(45deg);
+`;
 function Card(props) {
     // description length 200
     // title length 55
+    const shopContext = useShopContext();
     return (
         <CardWrapper>
             <CardImageWrapper image={props.image}></CardImageWrapper>
-            <FlexWrapperRow>
-                <CardTop>{props.category}</CardTop>
-                <CardTop>Hit</CardTop>
-            </FlexWrapperRow>
+            <FlexWrapperRow>{props.hit && <CardBestPrice>Best Price</CardBestPrice>}</FlexWrapperRow>
+            <CardPrice>${props.price}</CardPrice>
+            <CardTop>{props.category}</CardTop>
             <CardTitle>{props.title}</CardTitle>
 
             <Slider isOnlyY={true}>
                 <CardDesc>{props.description}</CardDesc>
             </Slider>
-
-            <CardButton className="btn">Add to cart</CardButton>
+            <CardButton
+                handleClick={() => {
+                    shopContext.handleAddToCart(props);
+                }}
+                handleClickDelete
+                className="btn">
+                Add to cart
+            </CardButton>
+            <CardButton
+                handleClick={() => {
+                    shopContext.handleRemoveFromCart(props);
+                }}
+                className="btn">
+                Delete from cart
+            </CardButton>
         </CardWrapper>
     );
 }
@@ -95,8 +155,12 @@ export default function ProductCard({ products, hits }) {
         return <h4>No products</h4>;
     }
     const productList = products.map((item) => {
-        // let hit = !!hits.filter((hit) => item.id === +hit)[0];
-        return <Card {...item} />;
+        let hit = !!hits.filter((hit) => item.id === +hit)[0];
+        return <Card key={item.id} {...item} hit={hit} />;
     });
-    return <UlStyling>{productList}</UlStyling>;
+    return (
+        <UlWrapper>
+            <UlStyling>{productList}</UlStyling>
+        </UlWrapper>
+    );
 }

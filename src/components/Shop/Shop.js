@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
 import Navbar from './Navbar/Navbar';
+import CartInner from './CartInner';
 import { ShopProvider } from '../../hooks/ShopProvider';
 
 // const Banner = () => {
@@ -12,7 +13,7 @@ function Shop() {
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [products, setProducts] = useState(() => JSON.parse(localStorage.getItem('products')) || null);
-    const [hits, setHits] = useState([]);
+    const [hits, setHits] = useState([...Array(3).keys()]);
     const [search, setSearch] = useState();
     useEffect(() => {
         async function getProducts() {
@@ -28,6 +29,7 @@ function Shop() {
                 setError(err.message);
                 setProducts(null);
             } finally {
+                setError(false);
                 setIsLoading(false);
             }
         }
@@ -72,6 +74,7 @@ function Shop() {
             <button className="btn btn-dark" onClick={handleSearch}>
                 Search
             </button>
+            <CartInner />
 
             <ProductCard products={products} hits={hits} />
         </ShopProvider>

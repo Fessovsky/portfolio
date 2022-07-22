@@ -1,5 +1,6 @@
 ::-webkit-scrollbar {
-    height: 7px;
+    height: 4px;
+    width: 4px;
     background: #35353538;
     -webkit-border-radius: 10ex;
     border-radius: 10ex;
@@ -16,6 +17,9 @@
 }
 .slider {
     display: inherit;
+}
+.slider__mask {
+    -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent);
 }
 .slider__overflow {
     overflow: auto;
