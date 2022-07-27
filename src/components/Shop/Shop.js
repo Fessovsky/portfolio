@@ -23,7 +23,7 @@ function Shop() {
                 setIsLoading(true);
                 const response = await fetch(`https://fakestoreapi.com/products${fetchParams}`);
                 const data = await response.json();
-                console.log(await data);
+
                 setProducts(await data);
             } catch (err) {
                 setError(err.message);

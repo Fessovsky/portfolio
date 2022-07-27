@@ -9,8 +9,24 @@ export const ShopProvider = ({ children }) => {
 
     const handleAddToCart = (data) => {
         setCart((prevState) => {
-            prevState.products.push(data);
-            return { ...prevState, quantity: cart.quantity + 1 };
+            if (
+                !!prevState.products.find((i) => {
+                    return i.id === data.id;
+                })
+            ) {
+                prevState.products = prevState.products.map((item) => {
+                    if (item.id === data.id) {
+                        return { ...item, quantity: item.quantity + 1 };
+                    }
+                    return item;
+                });
+
+                return { ...prevState, quantity: cart.quantity + 1 };
+            } else {
+                data = { ...data, quantity: 1 };
+                prevState.products.push(data);
+                return { ...prevState, quantity: cart.quantity + 1 };
+            }
         });
     };
     const handleRemoveFromCart = (data) => {
@@ -23,7 +39,11 @@ export const ShopProvider = ({ children }) => {
             let index = prevState.products.findIndex((product) => {
                 return data.id === product.id;
             });
-            prevState.products.splice(index, 1);
+            if (prevState.products[index].quantity === 1) {
+                prevState.products.splice(index, 1);
+            } else {
+                prevState.products[index].quantity -= 1;
+            }
             return { ...prevState, quantity: prevState.quantity - 1 };
         });
     };
@@ -31,6 +51,7 @@ export const ShopProvider = ({ children }) => {
         <ShopContext.Provider
             value={{
                 cart: cart,
+                setCart: setCart,
                 handleAddToCart: handleAddToCart,
                 handleRemoveFromCart: handleRemoveFromCart
             }}>

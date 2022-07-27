@@ -4,23 +4,35 @@ import { useShopContext } from '../../hooks/ShopProvider';
 export default function CartInner() {
     console.log('remount inner');
     const shopContext = useShopContext();
-    const [cart, setCart] = React.useState([]);
+    const [cartInner, setCartInner] = React.useState([]);
     const [cartView, setCartView] = React.useState();
 
     useEffect(() => {
-        console.log('cartView', cart);
-        const newCart = cart.map((product, i) => {
-            console.log(product);
-            return <li key={+new Date().getTime() + i}>s{product.title}</li>;
-        });
-        return () => {
+        try {
+            setCartInner(shopContext.cart.products);
+            const newCart = cartInner.map((product, i) => {
+                return (
+                    <div key={+new Date().getTime() + i}>
+                        {product.title} x {product.quantity}
+                        <button
+                            onClick={() => shopContext.handleRemoveFromCart(product)}
+                            className="btn ms-2">
+                            <b>X</b>
+                        </button>
+                    </div>
+                );
+            });
             setCartView(newCart);
-        };
-    }, [cart]);
-    useEffect(() => {
-        console.log('cart');
-        setCart(shopContext.cart.products);
-    }, [shopContext.cart.products]);
+        } catch (err) {
+            console.error(err);
+        }
+    }, [shopContext, cartInner]);
 
-    return <div>f{cartView}</div>;
+    return <div>{cartView}</div>;
 }
+
+// setCartIcon(
+//     shopContext.cart.reduce((acc, obj) => {
+//         return acc + obj.quantity * obj.price;
+//     }, 0)
+// );
