@@ -4,17 +4,82 @@ import cartImg from './pics/shopping-cart.png';
 import { useShopContext } from '../../../hooks/ShopProvider';
 import CartInner from '../CartInner';
 import './Cart.css';
-const ModalWrapper = styled.div`
-    display: block;
-    max-width: 400px;
+
+const CartQuantity = styled.div`
+    color: white;
+    background-color: red;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    display: flex;
+    font-size: 0.5rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     position: relative;
+    right: 7px;
+    top: -2px;
+`;
+const CartWrapper = styled.div`
+    display: flex;
+`;
+
+const ModalWrapper = styled.div`
+    background-color: white;
+    padding: 25px;
+    border-radius: 15px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+`;
+const CloseButton = styled.button`
+    border-radius: 50%;
+    padding: 0.5em;
+    width: 30px;
+    height: 30px;
+    border: 2px solid;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    &::before {
+        content: ' ';
+        position: absolute;
+        display: block;
+        background-color: black;
+        width: 2px;
+        left: 12px;
+        top: 5px;
+        bottom: 5px;
+        transform: rotate(45deg);
+    }
+    &::after {
+        content: ' ';
+        position: absolute;
+        display: block;
+        background-color: black;
+        height: 2px;
+        top: 12px;
+        left: 5px;
+        right: 5px;
+        transform: rotate(45deg);
+    }
+`;
+const BlackOut = styled.div`
+    background-color: #000000ba;
+    z-index: 999;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
 `;
 function Modal({ handleClose }) {
     return (
-        <ModalWrapper onClick={handleClose}>
-            <div>
-                <CartInner />
-            </div>
+        <ModalWrapper>
+            <CloseButton onClick={handleClose}></CloseButton>
+            <CartInner />
         </ModalWrapper>
     );
 }
@@ -29,16 +94,26 @@ export default function Cart() {
             return;
         }
     }, [shopContext]);
-    const handleClose = () => setIsShown(false);
 
-    const handleShow = () => setIsShown(true);
+    const handleClose = () => {
+        setIsShown(false);
+    };
+    const handleShow = () => {
+        setIsShown(true);
+    };
+
     return (
-        <div className="cart__wrapper">
-            <img onClick={handleShow} src={cartImg} alt="Cart" width="24px" />{' '}
-            <div className="cart__quantity">
+        <CartWrapper onClick={() => !isShown && handleShow()}>
+            <img src={cartImg} alt="Cart" width="24px" />{' '}
+            <CartQuantity>
                 <span>{cartIcon.quantity || 0}</span>
-            </div>
-            {/* <div className="modal">{isShown ? <Modal handleClose={handleClose} /> : 'no'}</div> */}
-        </div>
+            </CartQuantity>
+            {isShown ? (
+                <>
+                    <Modal handleClose={handleClose} />
+                    <BlackOut onClick={handleClose}></BlackOut>
+                </>
+            ) : undefined}
+        </CartWrapper>
     );
 }

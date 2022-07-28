@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
 import Navbar from './Navbar/Navbar';
-import CartInner from './CartInner';
+// import CartInner from './CartInner';
 import { ShopProvider } from '../../hooks/ShopProvider';
 
 // const Banner = () => {
@@ -69,13 +69,11 @@ function Shop() {
 
     return (
         <ShopProvider>
-            {error && <h1>Error: {`${error.message}`}</h1>}
+            {error && <h1>Error: {error.message}</h1>}
             <Navbar />
             <button className="btn btn-dark" onClick={handleSearch}>
                 Search
             </button>
-            <CartInner />
-
             <ProductCard products={products} hits={hits} />
         </ShopProvider>
     );

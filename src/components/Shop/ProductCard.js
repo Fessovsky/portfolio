@@ -119,7 +119,6 @@ const CardBestPrice = styled.div`
 function Card(props) {
     // description length 200
     // title length 55
-
     const shopContext = useShopContext();
     return (
         <CardWrapper>
@@ -136,7 +135,6 @@ function Card(props) {
                 handleClick={() => {
                     shopContext.handleAddToCart(props);
                 }}
-                handleClickDelete
                 className="btn">
                 Add to cart
             </CardButton>

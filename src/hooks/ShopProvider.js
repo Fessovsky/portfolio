@@ -47,13 +47,23 @@ export const ShopProvider = ({ children }) => {
             return { ...prevState, quantity: prevState.quantity - 1 };
         });
     };
+    const removeAllFromCart = (data) => {
+        setCart((prevState) => {
+            let index = prevState.products.findIndex((product) => {
+                return data.id === product.id;
+            });
+            prevState.products.splice(index, 1);
+            return { ...prevState, quantity: prevState.quantity - data.quantity };
+        });
+    };
     return (
         <ShopContext.Provider
             value={{
                 cart: cart,
                 setCart: setCart,
                 handleAddToCart: handleAddToCart,
-                handleRemoveFromCart: handleRemoveFromCart
+                handleRemoveFromCart: handleRemoveFromCart,
+                removeAllFromCart: removeAllFromCart
             }}>
             {children}
         </ShopContext.Provider>
