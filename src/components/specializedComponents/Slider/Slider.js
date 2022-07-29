@@ -57,7 +57,6 @@ export default function Slider({ isOnlyY, isOnlyX, isBoth, children }) {
                 scroller.current.children[0].scrollTop = scrollLeft + clientY - event.clientY;
             }
         };
-        let scrollChild = scroller.current.children[0];
 
         if (scroll.isScrolling) {
             window.addEventListener('mousemove', onMouseMove);

@@ -22,10 +22,13 @@ const CartQuantity = styled.div`
 `;
 const CartWrapper = styled.div`
     display: flex;
+    & > *:first-child {
+        cursor: pointer;
+    }
 `;
 
 const ModalWrapper = styled.div`
-    background-color: white;
+    background-color: #ffffff;
     padding: 25px;
     border-radius: 15px;
     position: absolute;
@@ -33,6 +36,11 @@ const ModalWrapper = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
+    width: 96vw;
+    max-width: 770px;
+    @media (max-width: 400px) {
+        padding: 10px 4px;
+    }
 `;
 const CloseButton = styled.button`
     border-radius: 50%;
@@ -99,9 +107,16 @@ export default function Cart() {
         setIsShown(false);
     };
     const handleShow = () => {
-        setIsShown(true);
+        if (shopContext.cart.products.length > 0) setIsShown(true);
     };
 
+    useEffect(() => {
+        if (isShown) {
+            document.querySelector('body').style.overflow = 'hidden';
+        } else {
+            document.querySelector('body').style.overflow = '';
+        }
+    }, [isShown]);
     return (
         <CartWrapper onClick={() => !isShown && handleShow()}>
             <img src={cartImg} alt="Cart" width="24px" />{' '}
