@@ -94,12 +94,11 @@ const CardTop = styled.h6`
 `;
 
 const UlStyling = styled.div`
-    display: flex;
-    margin: 30px 0;
-    padding: 0;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 15px;
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(275px, 280px));
+    grid-gap: 15px;
+    justify-content: center;
 `;
 const UlWrapper = styled.div`
     justify-content: center;

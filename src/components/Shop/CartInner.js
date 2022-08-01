@@ -179,7 +179,7 @@ const CardView = ({ product, addToCart, removeFromCart, removeAllFromCart }) => 
     );
 };
 const CardData = styled(CardView)``;
-export default function CartInner() {
+export default function CartInner({ closeModal }) {
     console.log('remount inner');
     const shopContext = useShopContext();
     const [cartInner, setCartInner] = React.useState([]);
@@ -208,14 +208,16 @@ export default function CartInner() {
                 );
             });
             setCartView(newCart);
+            !shopContext.cart.products.length && closeModal();
         } catch (err) {
             console.error(err);
         }
-    }, [shopContext, cartInner]);
+    }, [shopContext, cartInner, closeModal]);
 
     return (
-        <List>
-            {cartView} <div>Total: ${cartTotal}</div>
-        </List>
+        <>
+            <List>{cartView}</List>
+            <div>Total: ${cartTotal}</div>
+        </>
     );
 }

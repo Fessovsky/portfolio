@@ -87,7 +87,7 @@ function Modal({ handleClose }) {
     return (
         <ModalWrapper>
             <CloseButton onClick={handleClose}></CloseButton>
-            <CartInner />
+            <CartInner closeModal={handleClose} />
         </ModalWrapper>
     );
 }
