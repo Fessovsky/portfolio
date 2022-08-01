@@ -81,27 +81,7 @@ pre > code {
     white-space: nowrap; /* Opera 7 */
     word-wrap: nowrap;
 }
-/* game */
-.cell {
-    /* border-bottom: 1px solid #777; */
-    font-size: 0.7rem;
-}
 
-.field__container {
-    display: grid;
-    grid-template-columns: repeat(51, 1fr);
-    border: 1px solid #777;
-    max-width: 600px;
-}
-.game-pad__wrapper {
-    display: flex;
-    justify-content: center;
-}
-.game-pad__buttons {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-}
 .projects__list {
     display: flex;
     margin: 0 5px;

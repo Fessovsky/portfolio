@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import cartImg from './pics/shopping-cart.png';
 import { useShopContext } from '../../../hooks/ShopProvider';
 import CartInner from '../CartInner';
-import './Cart.css';
 
 const CartQuantity = styled.div`
     color: white;

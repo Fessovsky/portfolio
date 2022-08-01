@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import './roguelike.css';
 
 function Roguelike() {
     const width = 51;
+
     // const height = 19;
     const [ground, setGround] = useState([]);
     const [arrows, setArrows] = useState('');
     const [message, setMessage] = useState('');
     const [collisionMessage, setCollisionMessage] = useState('');
     // 26, 10 position of the user
-    function colisionAlfa(char) {
+    function collisionAlfa(char) {
         let result = '';
         switch (char) {
             case '%':
@@ -30,16 +32,10 @@ function Roguelike() {
         return result;
     }
     function createGround() {
-        // let i = 0;
         let tempArr = Array(1020)
             .fill('')
             .map(() => {
                 return Math.floor(Math.random() * 8) + 1;
-                // if (i % 51 === 0) {
-                //     i = i / 51;
-                // }
-
-                // return i++;
             });
         let fieldMap = [];
         for (let i = 0; i < tempArr.length; i++) {
@@ -54,27 +50,26 @@ function Roguelike() {
         return ground.map((el, i) => {
             return el.map((e, j) => {
                 let placeHolder = '';
-                if (e > 2) {
-                    placeHolder = '.';
+                if (e < 2) {
+                    placeHolder = '"';
                 }
                 if (e === 2) {
                     placeHolder = ',';
                 }
-                if (e < 2) {
-                    placeHolder = '"';
+                if (e > 2) {
+                    placeHolder = '.';
                 }
                 if (e > 7) {
                     placeHolder = '%';
                 }
 
                 if (i === 9 && j === 25) {
-                    setCollisionMessage(colisionAlfa(placeHolder));
+                    setCollisionMessage(collisionAlfa(placeHolder));
                     placeHolder = '@';
                 }
                 return (
                     <div className="cell" key={j + 'cell'}>
                         {placeHolder}
-                        {/* {e} */}
                     </div>
                 );
             });
@@ -158,7 +153,6 @@ function Roguelike() {
                 default:
                     setArrows('Use cursor');
             }
-            // console.log('move', e.key);
         }
 
         setGround(createGround());
@@ -168,7 +162,7 @@ function Roguelike() {
         };
     }, []);
     return (
-        <>
+        <div className="roguelike__wrapper">
             <div className="field__container">{map}</div>
             <div className="">
                 You press: <b>{arrows || '...'}</b> key on keyboard
@@ -199,11 +193,11 @@ function Roguelike() {
                 onClick={() => {
                     setMessage('New message:' + Date.now().toString());
                 }}
-                className="btn btn-success">
+                className="btn btn-success roguelike-button">
                 Change state for test useMemo
             </button>
-            <h4>{message}</h4>
-        </>
+            <span className="text-memo">{message}</span>
+        </div>
     );
 }
 Roguelike.customName = 'Roguelike';

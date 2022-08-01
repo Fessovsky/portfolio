@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
 import Navbar from './Navbar/Navbar';
-// import CartInner from './CartInner';
+import Search from './components/Search';
 import { ShopProvider } from '../../hooks/ShopProvider';
-
-// const Banner = () => {
-//     return <div>Banner</div>;
-// };
 
 function Shop() {
     console.log('shop mounted');
@@ -14,14 +10,13 @@ function Shop() {
     const [isLoading, setIsLoading] = useState(false);
     const [products, setProducts] = useState(() => JSON.parse(localStorage.getItem('products')) || null);
     const [hits, setHits] = useState([...Array(3).keys()]);
-    const [search, setSearch] = useState();
+
     useEffect(() => {
         async function getProducts() {
             try {
                 console.log('Fetching');
-                let fetchParams = search;
                 setIsLoading(true);
-                const response = await fetch(`https://fakestoreapi.com/products${fetchParams}`);
+                const response = await fetch(`https://fakestoreapi.com/products?limit=5`);
                 const data = await response.json();
 
                 setProducts(await data);
@@ -34,34 +29,16 @@ function Shop() {
             }
         }
         if (products === null) {
-            setSearch('?limit=8');
             setHits(['9']);
             getProducts();
         }
-    }, [products, search]);
+    }, [products]);
 
     useEffect(() => {
         return () => {
             localStorage.setItem('products', JSON.stringify(products));
         };
     }, [products]);
-
-    async function handleSearch() {
-        try {
-            console.log('Fetching');
-            let fetchParams = search;
-            setIsLoading(true);
-            const response = await fetch(`https://fakestoreapi.com/products${fetchParams}`);
-            const data = await response.json();
-
-            setProducts(await data);
-        } catch (err) {
-            setError(err.message);
-            setProducts(null);
-        } finally {
-            setIsLoading(false);
-        }
-    }
 
     if (isLoading) {
         return <h1>Loading...</h1>;
@@ -71,9 +48,7 @@ function Shop() {
         <ShopProvider>
             {error && <h1>Error: {error.message}</h1>}
             <Navbar />
-            <button className="btn btn-dark" onClick={handleSearch}>
-                Search
-            </button>
+            <Search setError={setError} setProducts={setProducts} setIsLoading={setIsLoading} />
             <ProductCard products={products} hits={hits} />
         </ShopProvider>
     );

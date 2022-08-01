@@ -23,7 +23,7 @@ export default function Header() {
         <header className="nav__header">
             <nav className="nav__wrapper">{linkList}</nav>
             <button className="nav__header__button small" onClick={handleClick}>
-                animate link
+                Click me
             </button>
         </header>
     );
