@@ -2,19 +2,20 @@ import React from 'react';
 import styled from 'styled-components';
 import { useRef, useEffect } from 'react';
 import { Raven, Explosion } from './GameData';
-const screenSize = 1.7;
+
+const CanvasWrapper = styled.div`
+    @media (max-height: 670px) {
+        height: 70vh;
+    }
+`;
 const Canvas = styled.canvas`
     display: block;
     position: absolute;
     top: 50%;
     left: 50%;
-    /* width: ${() => {
-        return 271 * screenSize + 'px';
-    }};
-    height: ${() => {
-        return 194 * screenSize + 'px';
-    }}; */
-
+    @media (max-height: 670px) {
+        top: calc(50% + 150px);
+    }
     border: 1px solid #ccc;
     transform: translate(-50%, -50%);
 `;
@@ -148,16 +149,6 @@ const CanvasComponent = ({ handleStatus }) => {
 
     return (
         <>
-            <Canvas
-                id="canvas1"
-                // width="500px" height="500px"
-                ref={canvas}></Canvas>
-            <Canvas
-                // width="500px"
-                // height="500px"
-                id="canvas2"
-                style={{ opacity: 0, backgroundColor: 'grey' }}
-                ref={collisionCanvas}></Canvas>
             <button
                 className="btn"
                 onClick={() => {
@@ -176,6 +167,18 @@ const CanvasComponent = ({ handleStatus }) => {
                 }}>
                 New game
             </button>
+            <CanvasWrapper>
+                <Canvas
+                    id="canvas1"
+                    // width="500px" height="500px"
+                    ref={canvas}></Canvas>
+                <Canvas
+                    // width="500px"
+                    // height="500px"
+                    id="canvas2"
+                    style={{ opacity: 0, backgroundColor: 'grey' }}
+                    ref={collisionCanvas}></Canvas>
+            </CanvasWrapper>
         </>
     );
 };
