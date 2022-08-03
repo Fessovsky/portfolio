@@ -21,6 +21,7 @@ const Canvas = styled.canvas`
 `;
 
 const CanvasComponent = ({ handleStatus }) => {
+    const [isScrollable, setIsScrollable] = React.useState(false);
     const canvas = useRef();
     const ctx = useRef();
     const collisionCanvas = useRef();
@@ -150,6 +151,7 @@ const CanvasComponent = ({ handleStatus }) => {
     return (
         <>
             <button
+                id="new_game_button"
                 className="btn"
                 onClick={() => {
                     handleStatus('start');
@@ -167,14 +169,20 @@ const CanvasComponent = ({ handleStatus }) => {
                 }}>
                 New game
             </button>
+            <button
+                className="btn"
+                onClick={() => {
+                    setIsScrollable((prevState) => {
+                        document.querySelector('body').style.overflow = prevState ? 'hidden' : 'auto';
+                        prevState && document.querySelector('#new_game_button').scrollIntoView();
+                        return !prevState;
+                    });
+                }}>
+                Game mode {isScrollable ? 'off' : 'on'}
+            </button>
             <CanvasWrapper>
+                <Canvas id="canvas1" ref={canvas}></Canvas>
                 <Canvas
-                    id="canvas1"
-                    // width="500px" height="500px"
-                    ref={canvas}></Canvas>
-                <Canvas
-                    // width="500px"
-                    // height="500px"
                     id="canvas2"
                     style={{ opacity: 0, backgroundColor: 'grey' }}
                     ref={collisionCanvas}></Canvas>
