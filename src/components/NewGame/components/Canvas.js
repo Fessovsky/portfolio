@@ -38,6 +38,7 @@ const Canvas = styled.canvas`
 const CanvasComponent = ({ handleStatus }) => {
     const [isScrollable, setIsScrollable] = React.useState(false);
     const [gameSpeed, setGameSpeed] = React.useState(0);
+    const [text, setText] = React.useState('null');
 
     const gameSpeedRef = useRef(gameSpeed);
     const canvas = useRef();
@@ -141,6 +142,8 @@ const CanvasComponent = ({ handleStatus }) => {
 
         const detectPixel = (e) => {
             let rect = e.target.getBoundingClientRect();
+            setText(e.target.id);
+            console.log('Click');
             let x = e.clientX - rect.left; // x position within the element.
             let y = e.clientY - rect.top; // y position within the element
             const detectPixelColor = collisionCtx.current.getImageData(x, y, 1, 1);
@@ -161,15 +164,15 @@ const CanvasComponent = ({ handleStatus }) => {
 
         requestAnimationFrame(tick);
         window.mobileCheck()
-            ? window.addEventListener('click', detectPixel)
-            : window.addEventListener('pointerdown', detectPixel);
+            ? window.addEventListener('pointerdown', detectPixel)
+            : window.addEventListener('click', detectPixel);
         return () => {
             window.mobileCheck()
-                ? window.removeEventListener('click', detectPixel)
-                : window.removeEventListener('pointerdown', detectPixel);
+                ? window.removeEventListener('pointerdown', detectPixel)
+                : window.removeEventListener('click', detectPixel);
             cancelAnimationFrame(requestIdRef.current);
         };
-    }, [tick, gameSpeed]);
+    }, [tick]);
     const handleSpeed = (e) => {
         setGameSpeed(e.target.value);
         gameSpeedRef.current = gameSpeed;
@@ -210,7 +213,7 @@ const CanvasComponent = ({ handleStatus }) => {
             </button>
             <input value={gameSpeed} onChange={(e) => handleSpeed(e)} type="number" max="600" min="0" />
             <div className="small mt-4" style={{ textAlign: 'center', padding: '0 10px' }}>
-                This is {window.mobileCheck() ? 'Mobile' : 'Desktop'}
+                This is {window.mobileCheck() ? 'Mobile' : 'Desktop'} {text}
             </div>
             <CanvasWrapper>
                 <Canvas id="canvas1" ref={canvas}></Canvas>
