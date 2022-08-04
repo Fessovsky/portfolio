@@ -1,5 +1,5 @@
 import ravenImg from '../img/raven.png';
-import boomSound from '../sounds/Ice attack 2.wav';
+// import boomSound from '../sounds/Ice attack 2.wav';
 import boomImage from '../img/boom.png';
 class Raven {
     constructor(ctx, canvas, difficulty) {
