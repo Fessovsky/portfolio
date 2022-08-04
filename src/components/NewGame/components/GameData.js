@@ -76,16 +76,16 @@ class Explosion {
         this.y = y;
         this.x = x;
         this.frame = 0;
-        this.sound = new Audio();
-        this.sound.volume = 0.05;
-        this.sound.src = boomSound;
+        // this.sound = new Audio();
+        // this.sound.volume = 0.05;
+        // this.sound.src = boomSound;
         this.timeSinceLastFrame = 0;
         this.frameInterval = 80;
         this.collisionCanvas = collisionCanvas;
         this.markedForDeletion = false;
     }
     update(deltaTime) {
-        if (this.frame === 0) this.sound.play();
+        // if (this.frame === 0) this.sound.play();
         this.timeSinceLastFrame += deltaTime;
         if (this.timeSinceLastFrame > this.frameInterval) {
             this.timeSinceLastFrame = 0;

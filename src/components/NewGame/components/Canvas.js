@@ -143,7 +143,7 @@ const CanvasComponent = ({ handleStatus }) => {
         const detectPixel = (e) => {
             let rect = e.target.getBoundingClientRect();
             setText(e.target.id);
-            console.log('Click');
+
             let x = e.clientX - rect.left; // x position within the element.
             let y = e.clientY - rect.top; // y position within the element
             const detectPixelColor = collisionCtx.current.getImageData(x, y, 1, 1);
