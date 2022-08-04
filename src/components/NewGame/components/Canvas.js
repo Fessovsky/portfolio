@@ -19,18 +19,18 @@ window.mobileCheck = function () {
     })(navigator.userAgent || navigator.vendor || window.opera);
     return check;
 };
+
 const CanvasWrapper = styled.div`
-    @media (max-height: 670px) {
-        height: 70vh;
+    @media (max-height: 845px) {
+        height: 75vh;
     }
 `;
 const Canvas = styled.canvas`
     display: block;
     position: absolute;
-    top: 50%;
     left: 50%;
-    @media (max-height: 670px) {
-        top: calc(50% + 150px);
+    top: calc(250px + ${(props) => props.lastElBottom + 'px'});
+    @media (max-height: 845px) {
     }
     border: 1px solid #ccc;
     transform: translate(-50%, -50%);
@@ -38,10 +38,14 @@ const Canvas = styled.canvas`
 
 const CanvasComponent = ({ handleStatus }) => {
     const [isScrollable, setIsScrollable] = React.useState(false);
+    const [gameSpeed, setGameSpeed] = React.useState(0);
+    const [height, setHeight] = React.useState('100');
+    const gameSpeedRef = useRef(gameSpeed);
     const canvas = useRef();
     const ctx = useRef();
     const collisionCanvas = useRef();
     const collisionCtx = useRef();
+    const lastElementRef = useRef('100');
 
     const requestIdRef = useRef(null);
 
@@ -56,14 +60,15 @@ const CanvasComponent = ({ handleStatus }) => {
 
     const lastTime = useRef(0);
     const animate = React.useCallback(
-        (deltaTime) => {
-            ctx.current.clearRect(0, 0, canvas.current.width, canvas.current.height);
-            collisionCtx.current.clearRect(
-                0,
-                0,
-                collisionCanvas.current.width,
-                collisionCanvas.current.height
-            );
+        (deltaTime, gameSpeed) => {
+            canvas.current && ctx.current.clearRect(0, 0, canvas.current.width, canvas.current.height);
+            canvas.current &&
+                collisionCtx.current.clearRect(
+                    0,
+                    0,
+                    collisionCanvas.current.width,
+                    collisionCanvas.current.height
+                );
 
             if (timeToNextRaven.current > ravenInterval.current) {
                 timer.current++;
@@ -78,9 +83,9 @@ const CanvasComponent = ({ handleStatus }) => {
             }
 
             drawScore();
-            [...ravens.current, ...explosions.current].forEach((raven) =>
-                raven.update(deltaTime, handleStatus, score.current, isGameOver)
-            );
+            [...ravens.current, ...explosions.current].forEach((raven) => {
+                raven.update(deltaTime, handleStatus, score.current, isGameOver, gameSpeed);
+            });
             [...ravens.current, ...explosions.current].forEach((raven) => raven.draw(collisionCtx.current));
 
             ravens.current = ravens.current.filter((raven) => !raven.markedForDeletion);
@@ -93,10 +98,9 @@ const CanvasComponent = ({ handleStatus }) => {
         (time) => {
             if (time !== lastTime.current) {
                 let deltaTime = time - lastTime.current;
-
                 lastTime.current = time;
                 timeToNextRaven.current += deltaTime;
-                animate(deltaTime);
+                animate(deltaTime, gameSpeedRef.current);
             }
             if (!isGameOver.current) {
                 requestIdRef.current = requestAnimationFrame(tick);
@@ -156,6 +160,7 @@ const CanvasComponent = ({ handleStatus }) => {
                 }
             });
         };
+
         requestAnimationFrame(tick);
         window.mobileCheck()
             ? window.addEventListener('click', detectPixel)
@@ -166,8 +171,19 @@ const CanvasComponent = ({ handleStatus }) => {
                 : window.removeEventListener('pointerdown', detectPixel);
             cancelAnimationFrame(requestIdRef.current);
         };
-    }, [tick]);
-
+    }, [tick, gameSpeed]);
+    const handleSpeed = (e) => {
+        setGameSpeed(e.target.value);
+        gameSpeedRef.current = gameSpeed;
+    };
+    // resize control
+    useEffect(() => {
+        function handleResize() {
+            setHeight(lastElementRef.current.getBoundingClientRect().bottom);
+        }
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
     return (
         <>
             <button
@@ -200,9 +216,14 @@ const CanvasComponent = ({ handleStatus }) => {
                 }}>
                 Game mode {isScrollable ? 'off' : 'on'}
             </button>
+            <input value={gameSpeed} onChange={(e) => handleSpeed(e)} type="number" max="600" min="0" />
+            <span ref={lastElementRef} style={{ textAlign: 'center', padding: '0 10px' }}>
+                This is mobile
+            </span>
             <CanvasWrapper>
-                <Canvas id="canvas1" ref={canvas}></Canvas>
+                <Canvas lastElBottom={height} id="canvas1" ref={canvas}></Canvas>
                 <Canvas
+                    lastElBottom={height}
                     id="canvas2"
                     style={{ opacity: 0, backgroundColor: 'grey' }}
                     ref={collisionCanvas}></Canvas>

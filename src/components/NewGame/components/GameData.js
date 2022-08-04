@@ -8,9 +8,9 @@ class Raven {
         this.sizeModifier = Math.random() * 0.5 + 0.25;
         this.width = this.spriteWidth * this.sizeModifier;
         this.height = this.spriteHeight * this.sizeModifier;
-        this.x = canvas.width;
+        this.x = canvas.width || 380;
         this.y = Math.random() * (canvas.height - this.height);
-        this.directionX = Math.random() * 1 + 2.1 * difficulty;
+        this.directionX = Math.random() * 0.1 + (2.1 * difficulty) / 100;
         this.directionY = Math.random() * 5 - 2.5;
         this.ctx = ctx;
         this.canvas = canvas;
@@ -31,12 +31,12 @@ class Raven {
             'rgb(' + this.randomColors[0] + ',' + this.randomColors[1] + ',' + this.randomColors[2] + ')';
     }
 
-    update(deltaTime, handleStatus, score, isGameOver) {
+    update(deltaTime, handleStatus, score, isGameOver, gameSpeed) {
         if (this.y < 0 || this.y > this.canvas.height - this.height) {
             this.directionY = this.directionY * -1;
         }
 
-        this.x -= this.directionX;
+        this.x -= this.directionX * gameSpeed;
         this.y += this.directionY;
         if (this.x < 0 - this.width) this.markedForDeletion = true;
         this.timeSinceFlap += deltaTime;
