@@ -21,6 +21,7 @@ window.mobileCheck = function () {
 };
 
 const CanvasWrapper = styled.div`
+    position: relative;
     @media (max-height: 845px) {
         height: 75vh;
     }
@@ -29,9 +30,7 @@ const Canvas = styled.canvas`
     display: block;
     position: absolute;
     left: 50%;
-    top: calc(250px + ${(props) => props.lastElBottom + 'px'});
-    @media (max-height: 845px) {
-    }
+    top: 225px;
     border: 1px solid #ccc;
     transform: translate(-50%, -50%);
 `;
@@ -39,13 +38,12 @@ const Canvas = styled.canvas`
 const CanvasComponent = ({ handleStatus }) => {
     const [isScrollable, setIsScrollable] = React.useState(false);
     const [gameSpeed, setGameSpeed] = React.useState(0);
-    const [height, setHeight] = React.useState('100');
+
     const gameSpeedRef = useRef(gameSpeed);
     const canvas = useRef();
     const ctx = useRef();
     const collisionCanvas = useRef();
     const collisionCtx = useRef();
-    const lastElementRef = useRef('100');
 
     const requestIdRef = useRef(null);
 
@@ -177,13 +175,7 @@ const CanvasComponent = ({ handleStatus }) => {
         gameSpeedRef.current = gameSpeed;
     };
     // resize control
-    useEffect(() => {
-        function handleResize() {
-            setHeight(lastElementRef.current.getBoundingClientRect().bottom);
-        }
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+
     return (
         <>
             <button
@@ -217,13 +209,12 @@ const CanvasComponent = ({ handleStatus }) => {
                 Game mode {isScrollable ? 'off' : 'on'}
             </button>
             <input value={gameSpeed} onChange={(e) => handleSpeed(e)} type="number" max="600" min="0" />
-            <span ref={lastElementRef} style={{ textAlign: 'center', padding: '0 10px' }}>
-                This is mobile
-            </span>
+            <div className="small mt-4" style={{ textAlign: 'center', padding: '0 10px' }}>
+                This is {window.mobileCheck() ? 'Mobile' : 'Desktop'}
+            </div>
             <CanvasWrapper>
-                <Canvas lastElBottom={height} id="canvas1" ref={canvas}></Canvas>
+                <Canvas id="canvas1" ref={canvas}></Canvas>
                 <Canvas
-                    lastElBottom={height}
                     id="canvas2"
                     style={{ opacity: 0, backgroundColor: 'grey' }}
                     ref={collisionCanvas}></Canvas>
