@@ -8,12 +8,12 @@ class Raven {
         this.sizeModifier = Math.random() * 0.5 + 0.25;
         this.width = this.spriteWidth * this.sizeModifier;
         this.height = this.spriteHeight * this.sizeModifier;
-        this.x = canvas.width || 380;
-        this.y = Math.random() * (canvas.height - this.height);
+        this.canvas = canvas;
+        this.x = this.canvas.width;
+        this.y = Math.random() * (this.canvas.height - this.height);
         this.directionX = Math.random() * 0.1 + (2.1 * difficulty) / 100;
         this.directionY = Math.random() * 5 - 2.5;
         this.ctx = ctx;
-        this.canvas = canvas;
         this.markedForDeletion = false;
         this.image = new Image();
         this.image.src = ravenImg;

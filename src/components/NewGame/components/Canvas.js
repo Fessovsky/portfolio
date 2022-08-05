@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useRef, useEffect } from 'react';
 import { Raven, Explosion } from './GameData';
+
 window.mobileCheck = function () {
     let check = false;
     (function (a) {
@@ -36,12 +37,13 @@ const Canvas = styled.canvas`
 `;
 
 const CanvasComponent = ({ handleStatus }) => {
-    const [isScrollable, setIsScrollable] = React.useState(false);
-    const [gameSpeed, setGameSpeed] = React.useState(0);
-    const [text, setText] = React.useState('null');
+    const [isScrollable, setIsScrollable] = React.useState(true);
+    const [gameSpeed, setGameSpeed] = React.useState({ speed: 1 });
 
+    const canvasWrapper = useRef();
     const gameSpeedRef = useRef(gameSpeed);
     const canvas = useRef();
+
     const ctx = useRef();
     const collisionCanvas = useRef();
     const collisionCtx = useRef();
@@ -59,9 +61,10 @@ const CanvasComponent = ({ handleStatus }) => {
 
     const lastTime = useRef(0);
     const animate = React.useCallback(
-        (deltaTime, gameSpeed) => {
+        (deltaTime, speed) => {
             canvas.current && ctx.current.clearRect(0, 0, canvas.current.width, canvas.current.height);
-            canvas.current &&
+
+            collisionCtx.current &&
                 collisionCtx.current.clearRect(
                     0,
                     0,
@@ -74,6 +77,7 @@ const CanvasComponent = ({ handleStatus }) => {
                 if (timer.current > 5) {
                     difficulty.current += 0.01;
                 }
+
                 ravens.current.push(new Raven(ctx.current, canvas.current, difficulty.current));
                 timeToNextRaven.current = 0;
                 ravens.current.sort((a, b) => {
@@ -83,7 +87,7 @@ const CanvasComponent = ({ handleStatus }) => {
 
             drawScore();
             [...ravens.current, ...explosions.current].forEach((raven) => {
-                raven.update(deltaTime, handleStatus, score.current, isGameOver, gameSpeed);
+                raven.update(deltaTime, handleStatus, score.current, isGameOver, speed.speed);
             });
             [...ravens.current, ...explosions.current].forEach((raven) => raven.draw(collisionCtx.current));
 
@@ -99,7 +103,8 @@ const CanvasComponent = ({ handleStatus }) => {
                 let deltaTime = time - lastTime.current;
                 lastTime.current = time;
                 timeToNextRaven.current += deltaTime;
-                animate(deltaTime, gameSpeedRef.current);
+                // check if canvases mounted
+                canvas.current && collisionCtx.current && animate(deltaTime, gameSpeedRef.current);
             }
             if (!isGameOver.current) {
                 requestIdRef.current = requestAnimationFrame(tick);
@@ -137,12 +142,12 @@ const CanvasComponent = ({ handleStatus }) => {
         canvas.current.height = window.innerHeight > 400 ? 400 : window.innerHeight * 0.45;
         collisionCanvas.current.width = window.innerWidth > 500 ? 500 : window.innerWidth * 0.9;
         collisionCanvas.current.height = window.innerHeight > 400 ? 400 : window.innerHeight * 0.45;
-
+        const useEffectCanvasWrapper = canvasWrapper.current;
         requestIdRef.current = requestAnimationFrame(tick);
 
         const detectPixel = (e) => {
+            e.preventDefault();
             let rect = e.target.getBoundingClientRect();
-            setText(e.target.id);
 
             let x = e.clientX - rect.left; // x position within the element.
             let y = e.clientY - rect.top; // y position within the element
@@ -163,21 +168,27 @@ const CanvasComponent = ({ handleStatus }) => {
         };
 
         requestAnimationFrame(tick);
+
         window.mobileCheck()
-            ? window.addEventListener('pointerdown', detectPixel)
-            : window.addEventListener('click', detectPixel);
+            ? useEffectCanvasWrapper.addEventListener('pointerdown', detectPixel)
+            : useEffectCanvasWrapper.addEventListener('click', detectPixel);
+
         return () => {
+            if (!useEffectCanvasWrapper) return;
             window.mobileCheck()
-                ? window.removeEventListener('pointerdown', detectPixel)
-                : window.removeEventListener('click', detectPixel);
+                ? useEffectCanvasWrapper.removeEventListener('pointerdown', detectPixel)
+                : useEffectCanvasWrapper.removeEventListener('click', detectPixel);
             cancelAnimationFrame(requestIdRef.current);
         };
     }, [tick]);
     const handleSpeed = (e) => {
-        setGameSpeed(e.target.value);
-        gameSpeedRef.current = gameSpeed;
+        e.preventDefault();
+        setGameSpeed((prevState) => {
+            let newValue = e.target.value > 600 ? 600 : e.target.value;
+            gameSpeedRef.current = { ...prevState, speed: newValue };
+            return { ...prevState, speed: newValue };
+        });
     };
-    // resize control
 
     return (
         <>
@@ -209,13 +220,13 @@ const CanvasComponent = ({ handleStatus }) => {
                         return !prevState;
                     });
                 }}>
-                Game mode {isScrollable ? 'off' : 'on'}
+                {isScrollable ? 'turn on ' : 'turn off '}game mode
             </button>
-            <input value={gameSpeed} onChange={(e) => handleSpeed(e)} type="number" max="600" min="0" />
+            <input value={gameSpeed.speed} onChange={(e) => handleSpeed(e)} type="number" max="600" min="0" />
             <div className="small mt-4" style={{ textAlign: 'center', padding: '0 10px' }}>
-                This is {window.mobileCheck() ? 'Mobile' : 'Desktop'} {text}
+                This is {window.mobileCheck() ? 'Mobile' : 'Desktop'}
             </div>
-            <CanvasWrapper>
+            <CanvasWrapper ref={canvasWrapper}>
                 <Canvas id="canvas1" ref={canvas}></Canvas>
                 <Canvas
                     id="canvas2"
