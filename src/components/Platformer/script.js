@@ -6,6 +6,13 @@ window.addEventListener('load', function () {
     canvas.height = 700;
     let gameSpeed = 1;
     let enemies = [];
+    const backgroundModifiers = {
+        layer1: 1,
+        layer2: 2,
+        layer3: 2.5,
+        layer4: 3
+    };
+
     class BackgroundLayer {
         constructor(image, speedModifier, width, height, gameSpeed) {
             this.x = 0;
@@ -17,11 +24,12 @@ window.addEventListener('load', function () {
             this.speed = gameSpeed * this.speedModifier;
         }
         update(gameSpeed) {
-            this.speed = this.speed = gameSpeed * this.speedModifier;
+            this.speed = gameSpeed * this.speedModifier;
             if (this.x <= -this.width) {
                 this.x = 0;
             }
-            this.x = Math.floor(this.x - this.speed);
+            // this.x = Math.floor(this.x - this.speed);
+            this.x = this.x - this.speed;
         }
         draw(context) {
             context.drawImage(this.image, this.x, this.y, this.width, this.height);
@@ -30,28 +38,28 @@ window.addEventListener('load', function () {
     }
     const backgroundLayer1 = new BackgroundLayer(
         document.getElementById('background-bg'),
-        1,
+        backgroundModifiers.layer1,
         canvas.width,
         canvas.height,
         gameSpeed
     );
     const backgroundLayer2 = new BackgroundLayer(
         document.getElementById('background-far-trees'),
-        2,
+        backgroundModifiers.layer2,
         canvas.width,
         canvas.height,
         gameSpeed
     );
     const backgroundLayer3 = new BackgroundLayer(
         document.getElementById('background-mid-trees'),
-        3,
+        backgroundModifiers.layer3,
         canvas.width,
         canvas.height,
         gameSpeed
     );
     const backgroundLayer4 = new BackgroundLayer(
         document.getElementById('background-trees'),
-        4,
+        backgroundModifiers.layer4,
         canvas.width,
         canvas.height,
         gameSpeed
@@ -265,7 +273,7 @@ window.addEventListener('load', function () {
 
         [...backgroundLayers].forEach((layer) => {
             layer.draw(ctx);
-            // layer.update(gameSpeed);
+            layer.update(gameSpeed);
         });
 
         player.update(input);
