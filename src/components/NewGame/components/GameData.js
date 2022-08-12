@@ -1,6 +1,10 @@
 import ravenImg from '../img/raven.png';
 // import boomSound from '../sounds/Ice attack 2.wav';
 import boomImage from '../img/boom.png';
+// import bg from '../img/background/bg.png';
+// import farTrees from '../img/background/far-tree.png';
+// import midTrees from '../img/background/layers/mid-trees.png';
+// import trees from '../img/background/layers/trees.png';
 class Raven {
     constructor(ctx, canvas, difficulty) {
         this.spriteWidth = 271;
@@ -50,6 +54,7 @@ class Raven {
             isGameOver.current = true;
         }
     }
+
     draw(collisionCtx) {
         collisionCtx.fillStyle = this.color;
         collisionCtx.fillRect(this.x, this.y, this.width, this.height);
@@ -66,6 +71,7 @@ class Raven {
         );
     }
 }
+
 class Explosion {
     constructor(x, y, size, collisionCanvas) {
         this.image = new Image();
@@ -107,4 +113,29 @@ class Explosion {
         );
     }
 }
+// class Background {
+//     constructor(gameWidth, gameHeight) {
+//         this.gameWidth = gameWidth;
+//         this.gameHeight = gameHeight;
+//         this.image1 = bg;
+//         this.image2 = farTrees;
+//         this.image3 = midTrees;
+//         this.image4 = trees;
+//     }
+// }
+// class Layer {
+//     constructor(game, width, height, speedModifier, image) {
+//         this.game = game;
+//         this.width = width;
+//         this.height= height;
+//         this.speedModifier= speedModifier;
+//         this.image = image
+//     }
+//     update(){
+
+//     }
+//     draw(){
+
+//     }
+// }
 export { Raven, Explosion };
