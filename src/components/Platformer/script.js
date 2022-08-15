@@ -6,10 +6,12 @@ window.addEventListener('load', function () {
     canvas.height = 700;
     let gameSpeed = 1;
     let enemies = [];
+    let score = 0;
+    let gameOver = false;
     const backgroundModifiers = {
         layer1: 1,
-        layer2: 2,
-        layer3: 2.5,
+        layer2: 1.7,
+        layer3: 2.3,
         layer4: 3
     };
 
@@ -22,6 +24,9 @@ window.addEventListener('load', function () {
             this.image = image;
             this.speedModifier = speedModifier;
             this.speed = gameSpeed * this.speedModifier;
+        }
+        restart() {
+            this.x = 0;
         }
         update(gameSpeed) {
             this.speed = gameSpeed * this.speedModifier;
@@ -70,12 +75,17 @@ window.addEventListener('load', function () {
             document.addEventListener('keydown', (e) => {
                 if (
                     (e.key === 'ArrowDown' ||
+                        e.key === 'Escape' ||
                         e.key === 'ArrowUp' ||
                         e.key === 'ArrowLeft' ||
                         e.key === 'ArrowRight') &&
                     this.keys.indexOf(e.key) === -1
                 ) {
                     this.keys.push(e.key);
+                }
+                if ((e.key === 'Escape' || e.code === 'Escape') && gameOver) {
+                    handleRestart();
+                    animate(0);
                 }
             });
             document.addEventListener('keyup', (e) => {
@@ -101,13 +111,17 @@ window.addEventListener('load', function () {
             this.imageIdle = document.getElementById('player-idle');
             this.imageRun = document.getElementById('player-run');
             this.image = null;
-            this.frame = 0;
+            this.frameY = 0;
             this.maxFrame = 3;
-            this.animationSpeed = 10;
 
             // position
-            this.x = 0;
+            this.x = 100;
             this.y = this.gameHeight - this.height;
+
+            // fps
+            this.fps = 10;
+            this.frameTimer = 0;
+            this.frameInterval = 1000 / this.fps;
 
             // characteristics
             this.baseSpeed = 3;
@@ -115,11 +129,22 @@ window.addEventListener('load', function () {
             this.vy = 0;
             this.weight = 1;
         }
+        restart() {
+            this.x = 100;
+            this.y = this.gameHeight - this.height;
+            this.frameY = 0;
+            this.maxFrame = 3;
+            this.frameTimer = 0;
+        }
         draw(context) {
+            // cirle around
+            // ctx.beginPath();
+            // context.arc(this.x + this.width / 2, this.y + this.height / 2, this.width / 2, 0, Math.PI * 2);
+            // ctx.stroke();
             context.drawImage(
                 this.image,
                 0,
-                this.frame * this.height,
+                this.frameY * this.height,
                 this.width,
                 this.height,
                 this.x,
@@ -129,16 +154,40 @@ window.addEventListener('load', function () {
             );
         }
 
-        handleRun() {}
-
-        update(input) {
-            this.animationSpeed--;
+        update(input, deltaTime, enemies, context) {
+            // collision
+            enemies.forEach((enemy) => {
+                const dx = enemy.x + enemy.modifiedWidth / 2 - (this.x + this.width / 2);
+                const dy = enemy.y + enemy.modifiedHeight / 2 - (this.y + this.height / 2);
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                // context.stroke();
+                // context.lineTo(enemy.x + enemy.modifiedWidth / 2, enemy.y + enemy.modifiedHeight / 2);
+                // context.lineTo(this.x + this.width / 2, this.y + this.height / 2);
+                // context.stroke();
+                if (distance < enemy.modifiedWidth / 2 + this.width / 2) {
+                    gameOver = true;
+                } else if (this.isSkiped(enemy)) {
+                    enemy.isSkiped = true;
+                }
+            });
+            if (this.frameTimer > this.frameInterval) {
+                if (this.frameY < this.maxFrame) {
+                    this.frameY++;
+                } else {
+                    this.frameY = 0;
+                }
+                this.frameTimer = 0;
+            } else {
+                this.frameTimer += deltaTime;
+            }
 
             if (input.keys.indexOf('ArrowRight') > -1) {
+                this.frame = 0;
                 this.maxFrame = 7;
                 this.image = document.getElementById('player-run');
                 this.speed = this.baseSpeed;
             } else if (input.keys.indexOf('ArrowLeft') > -1) {
+                this.frame = 0;
                 this.maxFrame = 7;
                 this.image = document.getElementById('player-run');
                 this.speed = -this.baseSpeed;
@@ -147,7 +196,7 @@ window.addEventListener('load', function () {
                 this.image = this.imageIdle;
                 this.vy -= 18;
             } else if (!this.onGround()) {
-                this.frame = 0;
+                this.frame = 1;
                 this.maxFrame = 0;
                 this.image = document.getElementById('player-transition to charge');
             } else {
@@ -171,21 +220,12 @@ window.addEventListener('load', function () {
             if (this.y > this.gameHeight - this.height) {
                 this.y = this.gameHeight - this.height;
             }
-
-            //frame animation
-            if (this.frame < this.maxFrame) {
-                if (this.animationSpeed === 0) {
-                    this.frame++;
-                }
-            } else {
-                this.frame = 0;
-            }
-            if (this.animationSpeed === 0) {
-                this.animationSpeed = 10;
-            }
         }
         onGround() {
             return this.y >= this.gameHeight - this.height;
+        }
+        isSkiped(enemy) {
+            return enemy.x + enemy.modifiedWidth / 2 < this.x + this.width / 2;
         }
     }
 
@@ -194,37 +234,54 @@ window.addEventListener('load', function () {
             this.gameWidth = gameWidth;
             this.gameHeight = gameHeight;
             this.size = Math.random() * 1.5 + 1;
-            this.width = 27;
-            this.height = 39;
-            this.modifiedWidth = this.width * this.size;
-            this.modifiedHeight = this.height * this.size;
+            this.frameWidth = 27;
+            this.frameHeight = 39;
+            this.modifiedWidth = this.frameWidth * this.size;
+            this.modifiedHeight = this.frameHeight * this.size;
+
+            // frame settings
             this.image = document.getElementById('player-run');
             this.x = this.gameWidth;
             this.y = this.gameHeight - this.modifiedHeight;
             this.frameY = 0;
             this.maxFrame = 7;
+
+            // fps
             this.fps = 10 / this.size;
             this.frameTimer = 0;
             this.frameInterval = 1000 / this.fps;
-            this.speed = 1;
+
+            // properties
+            this.speed = 4;
             this.setToDelete = false;
+            this.scored = false;
+            this.isSkiped = false;
         }
         draw(context) {
-            context.save();
-            context.strokeRect(this.x + this.width, this.y, this.modifiedWidth, this.modifiedHeight);
+            // context.save();
+            // context.strokeRect(this.x + this.width, this.y, this.modifiedWidth, this.modifiedHeight);
+            // ctx.beginPath();
 
+            // context.arc(
+            //     this.x + this.modifiedWidth / 2,
+            //     this.y + this.modifiedHeight / 2,
+            //     this.modifiedWidth / 2,
+            //     0,
+            //     Math.PI * 2
+            // );
+            // ctx.stroke();
             context.drawImage(
                 this.image,
                 0,
-                this.frameY * this.height,
-                this.width,
-                this.height,
-                this.x + this.width,
+                this.frameY * this.frameHeight,
+                this.frameWidth,
+                this.frameHeight,
+                this.x,
                 this.y,
                 this.modifiedWidth,
                 this.modifiedHeight
             );
-            context.restore();
+            // context.restore();
         }
         update(deltaTime) {
             if (this.frameTimer > this.frameInterval) {
@@ -234,9 +291,11 @@ window.addEventListener('load', function () {
             } else {
                 this.frameTimer += deltaTime;
             }
-            this.counter++;
+
             this.x -= this.speed;
-            if (this.x < 0 - this.modifiedWidth - this.width) this.setToDelete = true;
+            if (this.x < 0 - this.modifiedWidth - this.frameWidth) {
+                this.setToDelete = true;
+            }
         }
     }
     function handleEnemies(deltaTime) {
@@ -250,11 +309,43 @@ window.addEventListener('load', function () {
         enemies.forEach((enemy) => {
             enemy.draw(ctx);
             enemy.update(deltaTime);
+            if (enemy.isSkiped && !enemy.scored) {
+                score++;
+                enemy.scored = true;
+            }
         });
         enemies = enemies.filter((enemy) => !enemy.setToDelete);
     }
-    function displayStatus() {}
 
+    function displayStatus(context) {
+        context.textAlign = 'left';
+        context.font = '20px Helvetica';
+        context.fillStyle = 'black';
+        context.fillText('Score: ' + score, 20, 50);
+        context.font = '20px Helvetica';
+        context.fillStyle = 'white';
+        context.fillText('Score: ' + score, 21, 54);
+        if (gameOver) {
+            context.textAlign = 'center';
+            context.fillStyle = 'black';
+            context.fillText('GAME OVER, try again... press Escape for continue', canvas.width / 2, 200);
+            context.fillStyle = 'white';
+            context.fillText('GAME OVER, try again... press Escape for continue', canvas.width / 2 + 2, 202);
+        }
+    }
+    function handleRestart() {
+        player.restart();
+        [...backgroundLayers].forEach((layer) => {
+            layer.restart();
+        });
+        enemies = [];
+        gameOver = false;
+        score = 0;
+        lastTime = 0;
+        enemyTimer = 0;
+        enemyInterval = 1000;
+        randomEnemyInterval = Math.random() * 2000 + 500;
+    }
     const input = new InputHandler();
     const player = new Player(canvas.width, canvas.height);
 
@@ -276,10 +367,11 @@ window.addEventListener('load', function () {
             layer.update(gameSpeed);
         });
 
-        player.update(input);
+        player.update(input, deltaTime, enemies, ctx);
         player.draw(ctx);
         handleEnemies(deltaTime);
-        requestAnimationFrame(animate);
+        displayStatus(ctx);
+        if (!gameOver) requestAnimationFrame(animate);
     }
     animate(0);
 });
