@@ -1,0 +1,22 @@
+#game > img {
+    display: none;
+}
+#canvas1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 5px solid black;
+    max-width: 95%;
+    max-height: 95%;
+}
+
+#fullscreen-toggle {
+    position: absolute;
+    font-size: 20px;
+    top: 10px;
+    left: 50%;
+    padding: 10px;
+    z-index: 1001;
+    transform: translate(-50%);
+}
