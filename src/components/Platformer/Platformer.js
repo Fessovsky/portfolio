@@ -7,7 +7,7 @@ import BackgroundLayer from './src/Background';
 import Player from './src/Player';
 import Enemy from './src/Enemy';
 
-import 'style.css';
+import './style.css';
 // const backgroundLayer1 = new BackgroundLayer(
 //     document.getElementById('background-bg'),
 //     backgroundModifiers.layer1,
@@ -41,7 +41,17 @@ function Platformer() {
     const ctx = useRef();
     const requestIdRef = useRef(null);
     const animate = useCallback((deltaTime, speed) => {});
-    useEffect(() => {}, []);
+
+    function tick() {}
+    function drawRectangle(context) {}
+    useEffect(() => {
+        canvas.current.width = window.innerWidth;
+        canvas.current.height = 600;
+        ctx.current = canvas.current.getContext('2d');
+
+        requestIdRef.current = requestAnimationFrame();
+        // requestAnimationFrame();
+    }, []);
     return <canvas id="canvas1" ref={canvas}></canvas>;
 }
 

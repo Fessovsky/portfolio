@@ -4,7 +4,7 @@ import ChangeItemButton from '../components/specializedComponents/ChangeItemButt
 import Line from '../components/specializedComponents/Line/Line';
 
 function Projects() {
-    const [projectName, setProjectName] = React.useState('Shop');
+    const [projectName, setProjectName] = React.useState('Platformer');
     const projectsNames = projects.map((project) => {
         return project.type.projectName;
     });
@@ -14,7 +14,7 @@ function Projects() {
     let currentProject = projects.map((item, i) => {
         return item.type.projectName === projectName && { ...item, key: i };
     });
-    React.useEffect(() => {}, [projectName]);
+    // React.useEffect(() => {}, [projectName]);
     return (
         <>
             <ChangeItemButton onClickHandler={onClickHandler} itemsArray={projectsNames} />

@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react';
 import CrazyTextComponent from '../components/specializedComponents/CrazyTextComponent';
 import RefInput from '../components/specializedComponents/RefInput';
 import Learning from '../components/Learning';
+
+import Canvas from '../components/Platformer/src/Canvas';
 function Home() {
     // console.log('Parent element rendered: Home');
     const headerText = 'developer ';
@@ -91,6 +93,7 @@ function Home() {
     }
     return (
         <div>
+            <Canvas />
             <h1 className="home_page__title">
                 Hi I'm Dmitriy, <br /> web <CrazyTextComponent text={headerText} />
             </h1>
