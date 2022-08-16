@@ -1,6 +1,10 @@
 import ravenImg from '../img/raven.png';
-import boomSound from '../sounds/Ice attack 2.wav';
+// import boomSound from '../sounds/Ice attack 2.wav';
 import boomImage from '../img/boom.png';
+// import bg from '../img/background/bg.png';
+// import farTrees from '../img/background/far-tree.png';
+// import midTrees from '../img/background/layers/mid-trees.png';
+// import trees from '../img/background/layers/trees.png';
 class Raven {
     constructor(ctx, canvas, difficulty) {
         this.spriteWidth = 271;
@@ -8,12 +12,12 @@ class Raven {
         this.sizeModifier = Math.random() * 0.5 + 0.25;
         this.width = this.spriteWidth * this.sizeModifier;
         this.height = this.spriteHeight * this.sizeModifier;
-        this.x = canvas.width;
-        this.y = Math.random() * (canvas.height - this.height);
-        this.directionX = Math.random() * 1 + 2.1 * difficulty;
+        this.canvas = canvas;
+        this.x = this.canvas.width;
+        this.y = Math.random() * (this.canvas.height - this.height);
+        this.directionX = Math.random() * 0.1 + (2.1 * difficulty) / 100;
         this.directionY = Math.random() * 5 - 2.5;
         this.ctx = ctx;
-        this.canvas = canvas;
         this.markedForDeletion = false;
         this.image = new Image();
         this.image.src = ravenImg;
@@ -31,12 +35,12 @@ class Raven {
             'rgb(' + this.randomColors[0] + ',' + this.randomColors[1] + ',' + this.randomColors[2] + ')';
     }
 
-    update(deltaTime, handleStatus, score, isGameOver) {
+    update(deltaTime, handleStatus, score, isGameOver, gameSpeed) {
         if (this.y < 0 || this.y > this.canvas.height - this.height) {
             this.directionY = this.directionY * -1;
         }
 
-        this.x -= this.directionX;
+        this.x -= this.directionX * gameSpeed;
         this.y += this.directionY;
         if (this.x < 0 - this.width) this.markedForDeletion = true;
         this.timeSinceFlap += deltaTime;
@@ -50,6 +54,7 @@ class Raven {
             isGameOver.current = true;
         }
     }
+
     draw(collisionCtx) {
         collisionCtx.fillStyle = this.color;
         collisionCtx.fillRect(this.x, this.y, this.width, this.height);
@@ -66,6 +71,7 @@ class Raven {
         );
     }
 }
+
 class Explosion {
     constructor(x, y, size, collisionCanvas) {
         this.image = new Image();
@@ -76,16 +82,16 @@ class Explosion {
         this.y = y;
         this.x = x;
         this.frame = 0;
-        this.sound = new Audio();
-        this.sound.volume = 0.05;
-        this.sound.src = boomSound;
+        // this.sound = new Audio();
+        // this.sound.volume = 0.05;
+        // this.sound.src = boomSound;
         this.timeSinceLastFrame = 0;
         this.frameInterval = 80;
         this.collisionCanvas = collisionCanvas;
         this.markedForDeletion = false;
     }
     update(deltaTime) {
-        if (this.frame === 0) this.sound.play();
+        // if (this.frame === 0) this.sound.play();
         this.timeSinceLastFrame += deltaTime;
         if (this.timeSinceLastFrame > this.frameInterval) {
             this.timeSinceLastFrame = 0;
@@ -107,4 +113,29 @@ class Explosion {
         );
     }
 }
+// class Background {
+//     constructor(gameWidth, gameHeight) {
+//         this.gameWidth = gameWidth;
+//         this.gameHeight = gameHeight;
+//         this.image1 = bg;
+//         this.image2 = farTrees;
+//         this.image3 = midTrees;
+//         this.image4 = trees;
+//     }
+// }
+// class Layer {
+//     constructor(game, width, height, speedModifier, image) {
+//         this.game = game;
+//         this.width = width;
+//         this.height= height;
+//         this.speedModifier= speedModifier;
+//         this.image = image
+//     }
+//     update(){
+
+//     }
+//     draw(){
+
+//     }
+// }
 export { Raven, Explosion };
