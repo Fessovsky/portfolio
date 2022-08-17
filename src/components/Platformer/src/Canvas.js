@@ -1,25 +1,40 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect } from 'react';
 
-export default function Canvas(props) {
+export default function useCanvas(canvas, draw, update) {
     const canvasRef = useRef(null);
-    const draw = (ctx, deltaTime) => {
+
+    /*
+    const draw = (ctx, deltaTime, frameTimer, framePerSecond) => {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.font = '22px Sans-serif';
+        ctx.fillText('Hello world! ' + Math.round(deltaTime), 10, 20);
         // if (deltaTime) {ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         // ctx.fillStyle = '#000000';
         // ctx.beginPath();
         // ctx.arc(0 + 1, 100, 20 * Math.sin(360 * 0.1) ** 2, 0, 2 * Math.PI);
         // ctx.fill()};
     };
-
+    if (this.frameTimer > this.frameInterval) {
+        if (this.frameY < this.maxFrame) {
+            this.frameY++;
+        } else {
+            this.frameY = 0;
+        }
+        this.frameTimer = 0;
+    } else {
+        this.frameTimer += deltaTime;
+    }
+    */
     useEffect(() => {
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
-        canvas.width = props.canvasWidth;
-        canvas.height = props.canvasHeight;
-        canvas.style.border = props.canvasBorder;
+        canvas.width = canvas.width;
+        canvas.height = canvas.height;
+        canvas.style.border = canvas.canvasBorder;
 
         //* deltaTime
         let lastFrameTime = 0;
-        const targetFPS = props.fps;
+        const targetFPS = canvas.fps;
         let frameTimer = 0;
         const framePerSecond = 1000 / targetFPS;
         let animationFrameId;
@@ -28,7 +43,7 @@ export default function Canvas(props) {
             let deltaTime = timeStamp - lastFrameTime;
             lastFrameTime = timeStamp;
 
-            draw(context, deltaTime);
+            draw(context, deltaTime, frameTimer, framePerSecond);
             animationFrameId = window.requestAnimationFrame(render);
         };
         render(0);
@@ -36,6 +51,6 @@ export default function Canvas(props) {
             window.cancelAnimationFrame(animationFrameId);
         };
         // draw(context);
-    }, [draw]);
+    }, [draw, update]);
     return <canvas ref={canvasRef} {...props} />;
 }

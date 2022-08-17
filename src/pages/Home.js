@@ -93,7 +93,7 @@ function Home() {
     }
     return (
         <div>
-            <Canvas />
+            <Canvas canvasWidth={400} canvasHeight={250} />
             <h1 className="home_page__title">
                 Hi I'm Dmitriy, <br /> web <CrazyTextComponent text={headerText} />
             </h1>
