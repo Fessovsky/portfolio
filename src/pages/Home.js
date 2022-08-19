@@ -3,7 +3,7 @@ import CrazyTextComponent from '../components/specializedComponents/CrazyTextCom
 import RefInput from '../components/specializedComponents/RefInput';
 import Learning from '../components/Learning';
 
-import Canvas from '../components/Platformer/src/Canvas';
+import Platformer from '../components/Platformer/Platformer.js';
 function Home() {
     // console.log('Parent element rendered: Home');
     const headerText = 'developer ';
@@ -93,7 +93,7 @@ function Home() {
     }
     return (
         <div>
-            <Canvas canvasWidth={400} canvasHeight={250} />
+            <Platformer canvasWidth={400} canvasHeight={250} />
             <h1 className="home_page__title">
                 Hi I'm Dmitriy, <br /> web <CrazyTextComponent text={headerText} />
             </h1>

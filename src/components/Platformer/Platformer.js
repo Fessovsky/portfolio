@@ -37,22 +37,7 @@ import './style.css';
 //     gameSpeed
 // );
 function Platformer() {
-    const canvas = useRef();
-    const ctx = useRef();
-    const requestIdRef = useRef(null);
-    const animate = useCallback((deltaTime, speed) => {});
-
-    function tick() {}
-    function drawRectangle(context) {}
-    useEffect(() => {
-        canvas.current.width = window.innerWidth;
-        canvas.current.height = 600;
-        ctx.current = canvas.current.getContext('2d');
-
-        requestIdRef.current = requestAnimationFrame();
-        // requestAnimationFrame();
-    }, []);
-    return <canvas id="canvas1" ref={canvas}></canvas>;
+    return <div>Game</div>;
 }
 
 Platformer.customName = 'Platformer';
